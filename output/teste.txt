@@ -1,0 +1,3 @@
+IDUSUARIO: 1, DIA: Segunda, MATERIAS: [Matemática, Português],HORASMATERIAS: 1:30
+IDUSUARIO: 1, DIA: Terça, MATERIAS: [Matemática, Português],HORASMATERIAS: 1:30
+IDUSUARIO: 1, DIA: Quarta, MATERIAS: [Matemática, Português],HORASMATERIAS: 1:30
