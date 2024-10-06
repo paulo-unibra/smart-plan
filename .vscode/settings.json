@@ -1,6 +1,8 @@
 {
     "files.associations": {
         "*.embeddedhtml": "html",
-        "time.h": "c"
+        "time.h": "c",
+        "unistd.h": "c",
+        "fcntl.h": "c"
     }
 }

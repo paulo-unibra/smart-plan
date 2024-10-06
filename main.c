@@ -1,5 +1,27 @@
 #include <stdio.h>
 #include <unistd.h>
+#include <termios.h>
+#include <fcntl.h>
+
+
+void set_nonblocking_mode(int enable)
+{
+    struct termios t;
+    tcgetattr(STDIN_FILENO, &t);
+    if (enable)
+    {
+        t.c_lflag &= ~(ICANON | ECHO); // Desabilita modo canônico e eco
+        tcsetattr(STDIN_FILENO, TCSANOW, &t);
+        fcntl(STDIN_FILENO, F_SETFL, fcntl(STDIN_FILENO, F_GETFL) | O_NONBLOCK); // Modo não bloqueante
+    }
+    else
+    {
+        t.c_lflag |= (ICANON | ECHO); // Reativa o modo canônico e eco
+        tcsetattr(STDIN_FILENO, TCSANOW, &t);
+        fcntl(STDIN_FILENO, F_SETFL, fcntl(STDIN_FILENO, F_GETFL) & ~O_NONBLOCK); // Modo bloqueante
+    }
+}
+
 
 void menuLogado()
 {
@@ -11,14 +33,14 @@ void menuLogado()
 
     printf("4 - Verificar Desempenho\n");
 
-    printf("5 - Cadastrar-se na Monitoria");
+    printf("5 - Cadastrar-se na Monitoria\n");
     // Qual matéria
     // Horário disponível
     // Meio de Contato
 
-    printf("6 - Consultar Monitores");
+    printf("6 - Consultar Monitores\n\n");
     // Perguntar a matéria
-    // Lista todos os monitores nas materias que eu estou matriculado    
+    // Lista todos os monitores nas materias que eu estou matriculado
 }
 
 void iniciarEstudos()
@@ -27,6 +49,8 @@ void iniciarEstudos()
     int minutos = 0;
     int horas = 0;
     char ch;
+
+    set_nonblocking_mode(1);
 
     while (1)
     {
@@ -37,11 +61,11 @@ void iniciarEstudos()
         printf("\n⏱︎  %02d:%02d:%02d\n", horas, minutos, segundos);
         printf("Aperte ESC para parar\n");
 
-        ch = getchar();
-
-        if (ch == "\n")
-        {
-            printf("TESTE");
+       ch = getchar();
+        if (ch == 27) { // Verifica se "Enter" foi pressionado
+            printf("==================================\n");
+            printf("Você estudou %02d:%02d:%02d...\n", horas, minutos, segundos);
+            printf("==================================\n");
             break;
         }
 
@@ -53,14 +77,15 @@ void iniciarEstudos()
             segundos = 0;
         }
 
-        if (minutos == 59)
+        if (minutos == 60)
         {
             horas++;
             minutos = 0;
             segundos = 0;
         }
     }
-    // TERMINAR
+
+    set_nonblocking_mode(0);
 }
 
 void criarCronograma()
@@ -85,7 +110,7 @@ void criarCronograma()
     }
 
     printf("Horas disponíveis: ");
-    scanf("%f", &horas);
+    scanf("%f", &horas);                                                                            
 
     int horasEmMinutos = (horas * 60) / quantidadeMaterias;
     int minutosEmHoras = horasEmMinutos / 60;
@@ -139,7 +164,31 @@ void criarCronograma()
 void consultarCronograma()
 {
 
-    printf("CONSULTAR CRONOGRAMA");
+    system("clear");
+
+    printf("===CONSULTAR CRONOGRAMA===\n");
+    char line[400];
+
+    FILE *arquivo = fopen("cronogramas.txt", "r");
+
+    while (fgets(line, sizeof(line), arquivo)) {
+        // Remover o caractere de nova linha
+        // line[strcspn(line, "\n")] = 0;
+
+        int idUsuario; //Mudar para int para capturar o IDUSUARIO
+        char materias[200] = "";
+
+        printf("%s\n", line);
+
+        // // Ajustar o sscanf para usar %d para ler um inteiro
+        // sscanf(line, "IDUSUARIO: %d%[^,]", &idUsuario); // Note o uso de &idUsuario
+        sscanf(line, "IDUSUARIO: 1,Segunda,MATERIAS: %[^\n,] ,", materias);
+
+        printf("USUARIO: %d\n", idUsuario); // Mudar para ]%d
+        printf("MATERIAIS: %s\n", materias); // Mudar para %d
+    }
+    
+    fclose(arquivo);
 }
 
 void verificarDesempenho()
@@ -150,8 +199,9 @@ void verificarDesempenho()
 int main()
 {
     int opcao = 5;
+    system("clear");
 
-    while (opcao > 4)
+    while (1)
     {
         menuLogado();
         printf("Escolha uma opção:  ");
@@ -177,6 +227,8 @@ int main()
         {
             system("clear");
             printf("❌ \033[31mOpção inválida!!!\033[0m\n");
+
+            break;
         }
 
         // if(opcao > 4){
