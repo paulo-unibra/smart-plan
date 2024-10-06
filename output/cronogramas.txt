@@ -1,5 +1,5 @@
-IDUSUARIO: 1,Segunda,MATERIAS: [Artes,Inglês,],HORASMATERIAS: 2:0
-IDUSUARIO: 1,Terça,MATERIAS: [Artes,Inglês,],HORASMATERIAS: 2:0
-IDUSUARIO: 1,Quarta,MATERIAS: [Artes,Inglês,],HORASMATERIAS: 2:0
-IDUSUARIO: 2,Quinta,MATERIAS: [Artes,Inglês,],HORASMATERIAS: 2:0
-IDUSUARIO: 1,Sexta,MATERIAS: [Artes,Inglês,],HORASMATERIAS: 2:0
+IDUSUARIO: 1,Segunda,MATERIAS: {Artes: 1.5,Inglês: 1.5,Matemática: 1.5}
+IDUSUARIO: 1,Terça,MATERIAS: {Artes: 1.5,Inglês: 1.5}
+IDUSUARIO: 1,Quarta,MATERIAS: {Artes: 1.5,Ingls: 1.5}
+IDUSUARIO: 2,Quinta,MATERIAS: {Artes: 1.5,Inglês: 1.5}
+IDUSUARIO: 1,Sexta,MATERIAS: {Artes: 1.5,Inglês: 1.5}

@@ -2,7 +2,7 @@
 #include <unistd.h>
 #include <termios.h>
 #include <fcntl.h>
-
+#include <string.h>
 
 void set_nonblocking_mode(int enable)
 {
@@ -21,7 +21,6 @@ void set_nonblocking_mode(int enable)
         fcntl(STDIN_FILENO, F_SETFL, fcntl(STDIN_FILENO, F_GETFL) & ~O_NONBLOCK); // Modo bloqueante
     }
 }
-
 
 void menuLogado()
 {
@@ -62,7 +61,8 @@ void iniciarEstudos()
         printf("Aperte ESC para parar\n");
 
        ch = getchar();
-        if (ch == 27) { // Verifica se "Enter" foi pressionado
+        if (ch == 27)
+        { // Verifica se "Enter" foi pressionado
             printf("==================================\n");
             printf("Você estudou %02d:%02d:%02d...\n", horas, minutos, segundos);
             printf("==================================\n");
@@ -88,7 +88,7 @@ void iniciarEstudos()
     set_nonblocking_mode(0);
 }
 
-void criarCronograma()
+void criarCronograma(loggedUser)
 {
     int quantidadeMaterias;
     int contador;
@@ -177,15 +177,18 @@ void consultarCronograma()
 
         int idUsuario; //Mudar para int para capturar o IDUSUARIO
         char materias[200] = "";
+        char diaSemana[20] = "";
 
-        printf("%s\n", line);
 
         // // Ajustar o sscanf para usar %d para ler um inteiro
         // sscanf(line, "IDUSUARIO: %d%[^,]", &idUsuario); // Note o uso de &idUsuario
-        sscanf(line, "IDUSUARIO: 1,Segunda,MATERIAS: %[^\n,] ,", materias);
+        // sscanf(line, );
+        sscanf(line, "IDUSUARIO: %d,%[^,],MATERIAS: {%[^\n}] ,", &idUsuario, diaSemana, materias);
 
-        printf("USUARIO: %d\n", idUsuario); // Mudar para ]%d
-        printf("MATERIAIS: %s\n", materias); // Mudar para %d
+        printf("Dia: %s\n", diaSemana); // Mudar para %d
+        printf("Matérias: %s\n", materias); // Mudar para %d
+        printf("============================\n");
+
     }
     
     fclose(arquivo);
@@ -201,6 +204,8 @@ int main()
     int opcao = 5;
     system("clear");
 
+    char loggedUser[200] = "ID: 1,NOME:Paulo,EMAIL:pr838908@gmail.com,SENHA:z8618190,IDCURSO: 1,PERIODO: 2";
+
     while (1)
     {
         menuLogado();
@@ -213,7 +218,7 @@ int main()
         }
         else if (opcao == 2)
         {
-            criarCronograma();
+            criarCronograma(loggedUser);
         }
         else if (opcao == 3)
         {
