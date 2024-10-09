@@ -1,5 +1,5 @@
-IDUSUARIO: 1,Segunda,MATERIAS: {Artes: 1.5,Inglês: 1.5,Matemática: 1.5}
-IDUSUARIO: 1,Terça,MATERIAS: {Artes: 1.5,Inglês: 1.5}
-IDUSUARIO: 1,Quarta,MATERIAS: {Artes: 1.5,Ingls: 1.5}
-IDUSUARIO: 2,Quinta,MATERIAS: {Artes: 1.5,Inglês: 1.5}
-IDUSUARIO: 1,Sexta,MATERIAS: {Artes: 1.5,Inglês: 1.5}
+
+IDUSUARIO: 1,Segunda,MATERIAS: {Estruturas de Dados: 01:15,Banco de Dados: 01:15,Engenharia de Software: 01:15,Redes de Computadores: 01:15,},
+IDUSUARIO: 1,Terça,MATERIAS: {Estruturas de Dados: 01:15,Banco de Dados: 01:15,Engenharia de Software: 01:15,Redes de Computadores: 01:15,},
+IDUSUARIO: 1,Quarta,MATERIAS: {Estruturas de Dados: 01:15,Banco de Dados: 01:15,Engenharia de Software: 01:15,Redes de Computadores: 01:15,},
+IDUSUARIO: 1,Quinta,MATERIAS: {Estruturas de Dados: 01:15,Banco de Dados: 01:15,Engenharia de Software: 01:15,Redes de Computadores: 01:15,},
