@@ -7,6 +7,10 @@
         "string.h": "c",
         "stdlib.h": "c",
         "termios.h": "c",
-        "stdio.h": "c"
+        "stdio.h": "c",
+        "validations.h": "c",
+        "login.h": "c",
+        "errors.h": "c",
+        "helper.h": "c"
     }
 }

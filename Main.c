@@ -1,48 +1,12 @@
 #include <stdio.h>
-#include <unistd.h>
-#include <termios.h>
-#include <fcntl.h>
 #include <string.h>
 #include <stdlib.h>
 
 #include "helper.h"
 #include "errors.h"
 #include "validations.h"
-#include "./_Login/login.h"
+#include "./_Auth/login.h"
 
-void set_nonblocking_mode(int enable)
-{
-    struct termios t;
-    tcgetattr(STDIN_FILENO, &t);
-    if (enable)
-    {
-        t.c_lflag &= ~(ICANON | ECHO); // Desabilita modo canônico e eco
-        tcsetattr(STDIN_FILENO, TCSANOW, &t);
-        fcntl(STDIN_FILENO, F_SETFL, fcntl(STDIN_FILENO, F_GETFL) | O_NONBLOCK); // Modo não bloqueante
-    }
-    else
-    {
-        t.c_lflag |= (ICANON | ECHO); // Reativa o modo canônico e eco
-        tcsetattr(STDIN_FILENO, TCSANOW, &t);
-        fcntl(STDIN_FILENO, F_SETFL, fcntl(STDIN_FILENO, F_GETFL) & ~O_NONBLOCK); // Modo bloqueante
-    }
-}
-
-char *replaceCommaWithNewline(char *str)
-{
-    char *original = str;
-
-    while (*str != '\0')
-    {
-        if (*str == ',')
-        {
-            *str = '\n';
-        }
-        str++;
-    }
-
-    return original;
-}
 void menuLogado()
 {
     printf("1 - Consultar Cronograma\n");
@@ -332,129 +296,6 @@ void consultCronogram()
 void verificarDesempenho()
 {
     printf("VERIFICAR DESEMPENHO");
-}
-
-struct User
-{
-    char name[255];
-    char email[255];
-    char password[255];
-    char conf_password[255];
-};
-
-int isValidOption(int *option)
-{
-    return (*option == 1 || *option == 2);
-}
-
-void registerUser(int *logged)
-{
-    system("clear");
-    struct User user;
-    printf("======CADASTRO=====\n");
-
-    while (!isCompositeName(user.name))
-    {
-        printf("Digite o nome do usuário: ");
-        scanf(" %[^\n]", user.name);
-
-        system("clear");
-        showError("Digite o nome completo");
-    }
-
-    system("clear");
-
-    while (!isValidEmail(user.email))
-    {
-        printf("Digite o e-mail do usuário: ");
-        scanf(" %[^\n]", user.email);
-
-        system("clear");
-        showError("E-mail inválido");
-    }
-
-    while (!isStrongPassword(user.password))
-    {
-        printf("Digite sua senha: ");
-        scanf(" %[^\n]", user.password);
-    }
-
-    while (!comparePasswords(user.password, user.conf_password))
-    {
-        printf("Confirme a sua senha: ");
-        scanf(" %[^\n]", user.conf_password);
-
-        system("clear");
-        showError("Senha e confirmação precisam ser iguais!");
-    }
-
-    system("clear");
-
-    // VALIDAR IGUALDADE COM A SENHA
-
-    // VERIFICAR SE USUARIO JA EXISTE PELO EMAIL
-
-    // TUDO VALIDO - CADASTRAR NO BANCO
-    FILE *bdUser = fopen("users.txt", "a");
-    fprintf(bdUser, "\n%s,", user.name);
-    fprintf(bdUser, "%s,", user.email);
-    fprintf(bdUser, "%s", user.password);
-    fclose(bdUser);
-
-    *logged = 1;
-}
-
-void login(int *logged)
-{
-    struct User user;
-    char line[200];
-
-    printf("======LOGIN=====\n");
-
-    printf("Digite o e-mail do usuário: ");
-    scanf(" %s", user.email);
-
-    printf("Digite sua senha: ");
-    scanf(" %s", user.password);
-
-    // TUDO VALIDO - CADASTRAR NO BANCO
-    FILE *bdUser = fopen("users.txt", "r");
-
-    if (bdUser == NULL)
-    {
-        system("clear");
-        printf("%s", fileNotCreatedError());
-        return;
-    }
-
-    while (fgets(line, sizeof(line), bdUser) != NULL)
-    {
-        char sName[200], sEmail[200], sPass[200];
-
-        sscanf(line, "%[^,],%[^,],%s", sName, sEmail, sPass);
-
-        // printf("%s\n", line);
-        // printf("%s\n", sEmail);
-        // printf("%s\n", user.email);
-
-        if (strcmp(sEmail, user.email) == 0 && strcmp(sPass, user.password) == 0)
-        {
-            *logged = 1;
-            break;
-        }
-    }
-
-    if (*logged == 1)
-    {
-        printf("\033[32mUsuário Logado com Sucesso!\033[0m\n");
-    }
-    else
-    {
-        system("clear");
-        printf("\033[31mE-MAIL E/OU SENHA INCORRETO(s)\033[0m\n");
-    }
-
-    fclose(bdUser);
 }
 
 int main()

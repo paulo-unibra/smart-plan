@@ -126,3 +126,8 @@ int comparePasswords(const char *password, const char *confirmPassword) {
         return 0;  // As senhas não coincidem
     }
 }
+
+int isValidOptionLogin(int *option)
+{
+    return (*option == 1 || *option == 2);
+}
