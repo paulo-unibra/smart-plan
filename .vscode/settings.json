@@ -5,6 +5,8 @@
         "unistd.h": "c",
         "fcntl.h": "c",
         "string.h": "c",
-        "stdlib.h": "c"
+        "stdlib.h": "c",
+        "termios.h": "c",
+        "stdio.h": "c"
     }
 }

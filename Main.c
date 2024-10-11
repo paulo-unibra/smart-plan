@@ -5,6 +5,11 @@
 #include <string.h>
 #include <stdlib.h>
 
+#include "helper.h"
+#include "errors.h"
+#include "validations.h"
+#include "./_Login/login.h"
+
 void set_nonblocking_mode(int enable)
 {
     struct termios t;
@@ -100,19 +105,26 @@ void getChoosenMateries(char **choosenMateriesNames, struct Materia *materias, i
     }
 }
 
-void showMateriesNames(int qCursoId, int qPeriodo, int *choosenMateries, int currentSizeMateries, char **choosenMateriesNames)
+int showMateriesNames(int qCursoId, int qPeriodo, int *choosenMateries, int currentSizeMateries, char **choosenMateriesNames)
 {
     FILE *file = fopen("materias.txt", "r");
 
     char line[200];
 
-    int currentSize = 1;
+    int currentSize = 0;
 
     int materiaId;
     int idCurso;
     char materia[30];
     int periodo;
     int count = 0;
+
+    if (file == NULL)
+    {
+        system("clear");
+        // fileNotCreatedError();
+        return 1;
+    }
 
     int position = 0;
 
@@ -130,13 +142,15 @@ void showMateriesNames(int qCursoId, int qPeriodo, int *choosenMateries, int cur
 
         if (idCurso == qCursoId && periodo == qPeriodo)
         {
+            currentSize++;
+
+            materias = (struct Materia *)realloc(materias, currentSize * sizeof(struct Materia));
+
             materias[position].id = materiaId;
             materias[position].cursoId = qCursoId;
             strcpy(materias[position].nome, materia);
             materias[position].periodo = periodo;
 
-            currentSize++;
-            materias = (struct Materia *)realloc(materias, currentSize * sizeof(struct Materia));
             position++;
         }
     }
@@ -160,9 +174,11 @@ void showMateriesNames(int qCursoId, int qPeriodo, int *choosenMateries, int cur
     }
 
     fclose(file);
+
+    return 0;
 }
 
-void iniciarEstudos()
+void startStudies()
 {
     int segundos = 0;
     int minutos = 0;
@@ -208,25 +224,14 @@ void iniciarEstudos()
     set_nonblocking_mode(0);
 }
 
-char *convertNumberToHours(float numberHour)
-{
-    static char timeString[6];
-    int hoursToMinutes = (numberHour * 60);
-    int minutosEmHoras = hoursToMinutes / 60;
-    int minutosRestantes = hoursToMinutes % 60;
-
-    sprintf(timeString, "%02d:%02d", minutosEmHoras, minutosRestantes);
-
-    return timeString;
-}
-
-void criarCronograma(loggedUser)
+int createCronogram()
 {
     int contador = 0;
     float horas;
     int registerAgain = 1;
-    int currentSizeMateries = 0;
     int *choosenMateries = NULL;
+    int currentSizeMateries = 0;
+
     char **choosenMateriesNames = (char **)malloc(currentSizeMateries * sizeof(char *));
 
     system("clear");
@@ -243,6 +248,7 @@ void criarCronograma(loggedUser)
         choosenMateriesNames = realloc(choosenMateriesNames, currentSizeMateries * sizeof(char *));
 
         showMateriesNames(1, 2, choosenMateries, currentSizeMateries, choosenMateriesNames);
+
         printf("Escolha um número de (1 - 6) para matéria: ");
         scanf("%d", &choosenMateries[contador]);
 
@@ -263,7 +269,7 @@ void criarCronograma(loggedUser)
     int i;
     int count = 0;
 
-    FILE *arquivo = fopen("cronogramas.txt", "a");
+    FILE *file = fopen("cronogramas.txt", "a");
 
     float horasMateria = horas / currentSizeMateries;
 
@@ -271,28 +277,30 @@ void criarCronograma(loggedUser)
 
     for (i = 0; i < currentSizeMateries; i++)
     {
-        fprintf(arquivo, "\nIDUSUARIO: 1,");
-        fprintf(arquivo, "%s,", diasSemana[i]);
+        fprintf(file, "\nIDUSUARIO: 1,");
+        fprintf(file, "%s,", diasSemana[i]);
 
-        fprintf(arquivo, "MATERIAS: {");
+        fprintf(file, "MATERIAS: {");
         count = 0;
 
         while (count < currentSizeMateries)
         {
-            fprintf(arquivo, "%s: %s,", choosenMateriesNames[count], convertNumberToHours(horasMateria));
+            fprintf(file, "%s: %s,", choosenMateriesNames[count], convertNumberToHours(horasMateria));
             count++;
         }
 
-        fprintf(arquivo, "},");
+        fprintf(file, "},");
     }
 
-    fclose(arquivo);
+    fclose(file);
 
     printf("CRONOGRAMA CRIADO!\n");
     printf("====================\n");
+
+    return 0;
 }
 
-void consultarCronograma()
+void consultCronogram()
 {
 
     system("clear");
@@ -300,9 +308,9 @@ void consultarCronograma()
     printf("===CONSULTAR CRONOGRAMA===\n");
     char line[400];
 
-    FILE *arquivo = fopen("cronogramas.txt", "r");
+    FILE *file = fopen("cronogramas.txt", "r");
 
-    while (fgets(line, sizeof(line), arquivo))
+    while (fgets(line, sizeof(line), file))
     {
         int idUsuario; // Mudar para int para capturar o IDUSUARIO
         char materias[200] = "";
@@ -310,14 +318,15 @@ void consultarCronograma()
 
         sscanf(line, "IDUSUARIO: %d,%[^,],MATERIAS: {%[^\n}] ,", &idUsuario, diaSemana, materias);
 
-        printf("Dia: \033[1;34m%s\033[0m\n", diaSemana);
+        printf("\033[1m\033[3m\033[34m%s\033[0m\n", diaSemana);
+
         printf("- Matérias - \n");
         printf("%s", replaceCommaWithNewline(materias));
 
         printf("============================\n");
     }
 
-    fclose(arquivo);
+    fclose(file);
 }
 
 void verificarDesempenho()
@@ -333,44 +342,54 @@ struct User
     char conf_password[255];
 };
 
-void initialMenu(int *option)
-{   
-    printf("Digite uma opção para continuar: \n");
-    printf("1 - Login\n");
-    printf("2 - Cadastro\n");
-
-    if (scanf("%d", option) != 1)
-    {
-        while (getchar() != '\n')
-            ;
-    }
-}
-
 int isValidOption(int *option)
 {
     return (*option == 1 || *option == 2);
 }
 
-void registerUser()
+void registerUser(int *logged)
 {
     system("clear");
     struct User user;
     printf("======CADASTRO=====\n");
 
-    printf("Digite o nome do usuário: ");
-    scanf(" %[^\n]", user.name);
-    // VALIDAR TEM PELO MENOS 2 NOMES
+    while (!isCompositeName(user.name))
+    {
+        printf("Digite o nome do usuário: ");
+        scanf(" %[^\n]", user.name);
 
-    printf("Digite o e-mail do usuário: ");
-    scanf(" %s", user.email);
-    // VALIDAR EMAIL
+        system("clear");
+        showError("Digite o nome completo");
+    }
 
-    printf("Digite sua senha: ");
-    scanf(" %s", user.password);
-    // VALIDAR FORÇA DA SENHA
+    system("clear");
 
-    printf("Confirme a sua senha: ");
-    scanf(" %s", user.conf_password);
+    while (!isValidEmail(user.email))
+    {
+        printf("Digite o e-mail do usuário: ");
+        scanf(" %[^\n]", user.email);
+
+        system("clear");
+        showError("E-mail inválido");
+    }
+
+    while (!isStrongPassword(user.password))
+    {
+        printf("Digite sua senha: ");
+        scanf(" %[^\n]", user.password);
+    }
+
+    while (!comparePasswords(user.password, user.conf_password))
+    {
+        printf("Confirme a sua senha: ");
+        scanf(" %[^\n]", user.conf_password);
+
+        system("clear");
+        showError("Senha e confirmação precisam ser iguais!");
+    }
+
+    system("clear");
+
     // VALIDAR IGUALDADE COM A SENHA
 
     // VERIFICAR SE USUARIO JA EXISTE PELO EMAIL
@@ -381,14 +400,14 @@ void registerUser()
     fprintf(bdUser, "%s,", user.email);
     fprintf(bdUser, "%s", user.password);
     fclose(bdUser);
+
+    *logged = 1;
 }
 
-void login()
+void login(int *logged)
 {
-    system("clear");
     struct User user;
     char line[200];
-    int authorizated = 0;
 
     printf("======LOGIN=====\n");
 
@@ -403,7 +422,8 @@ void login()
 
     if (bdUser == NULL)
     {
-        printf("Arquivo não está criado!");
+        system("clear");
+        printf("%s", fileNotCreatedError());
         return;
     }
 
@@ -419,55 +439,22 @@ void login()
 
         if (strcmp(sEmail, user.email) == 0 && strcmp(sPass, user.password) == 0)
         {
-            authorizated = 1;
+            *logged = 1;
             break;
         }
     }
 
-    if (authorizated == 1)
+    if (*logged == 1)
     {
-        printf("Usuário Logado com Sucesso!\n");
+        printf("\033[32mUsuário Logado com Sucesso!\033[0m\n");
     }
     else
     {
+        system("clear");
         printf("\033[31mE-MAIL E/OU SENHA INCORRETO(s)\033[0m\n");
     }
 
     fclose(bdUser);
-}
-
-void menuLogin()
-{
-    int option = 3;
-
-    while (1)
-    {
-        initialMenu(&option);
-
-        if (isValidOption(&option))
-        {
-            switch (option)
-            {
-            case 1:
-                login();
-                break;
-
-            case 2:
-                registerUser();
-                break;
-            default:
-            printf("❌ \033[31mOpção inválida!!!\033[0m\n");
-            }
-
-            printf("======================================\n");
-            break;
-        }
-        else
-        {
-            system("clear");
-            printf("❌ \033[31mOpção inválida!!!\033[0m\n");
-        }
-    }
 }
 
 int main()
@@ -477,7 +464,7 @@ int main()
     int opcao = 5;
     system("clear");
 
-    char loggedUser[200] = "ID: 1,NOME:Paulo,EMAIL:pr838908@gmail.com,SENHA:z8618190,IDCURSO: 1,PERIODO: 2";
+    // char loggedUser[200] = "ID: 1,NOME:Paulo,EMAIL:pr838908@gmail.com,SENHA:z8618190,IDCURSO: 1,PERIODO: 2";
 
     while (1)
     {
@@ -487,15 +474,15 @@ int main()
 
         if (opcao == 1)
         {
-            consultarCronograma();
+            consultCronogram();
         }
         else if (opcao == 2)
         {
-            criarCronograma(loggedUser);
+            createCronogram();
         }
         else if (opcao == 3)
         {
-            iniciarEstudos();
+            startStudies();
         }
         else if (opcao == 4)
         {
@@ -510,7 +497,7 @@ int main()
         }
 
         // if(opcao > 4){
-        //     system("clear");
+        // system("clear");
         // }
     }
 

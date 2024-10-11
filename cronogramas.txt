@@ -1,0 +1,5 @@
+
+IDUSUARIO: 1,Segunda,MATERIAS: {Redes de Computadores: 00:30,Estruturas de Dados: 00:30,Banco de Dados: 00:30,Redes de Computadores: 00:30,},
+IDUSUARIO: 1,Terça,MATERIAS: {Redes de Computadores: 00:30,Estruturas de Dados: 00:30,Banco de Dados: 00:30,Redes de Computadores: 00:30,},
+IDUSUARIO: 1,Quarta,MATERIAS: {Redes de Computadores: 00:30,Estruturas de Dados: 00:30,Banco de Dados: 00:30,Redes de Computadores: 00:30,},
+IDUSUARIO: 1,Quinta,MATERIAS: {Redes de Computadores: 00:30,Estruturas de Dados: 00:30,Banco de Dados: 00:30,Redes de Computadores: 00:30,},
