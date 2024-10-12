@@ -12,6 +12,18 @@ int showError(char *errorMessage)
     return 0;
 }
 
+int showWarning(char *warning)
+{
+    printf("📢 \033[1m\033[3m\033[38;5;208m%s\033[0m\n", warning);
+    return 0;
+}
+
+int showInfo(char *message)
+{
+    printf("\033[3;1;38m%s\033[0m\n", message);
+    return 0;
+}
+
 int showPasswordStrongError()
 {
     // Mensagem inicial com ícone

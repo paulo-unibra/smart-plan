@@ -11,6 +11,8 @@
         "validations.h": "c",
         "login.h": "c",
         "errors.h": "c",
-        "helper.h": "c"
+        "helper.h": "c",
+        "cronogram.h": "c",
+        "materies.h": "c"
     }
 }

@@ -19,12 +19,12 @@ void initialMenu(int *option)
     }
 }
 
-void menuLogin()
+void menuLogin(struct User *loggedUser)
 {
     int option = 3;
     int logged = 0;
 
-    struct User user;
+    // struct User user;
 
     while (logged == 0)
     {
@@ -35,10 +35,10 @@ void menuLogin()
             switch (option)
             {
             case 1:
-                login(&logged, &user);
+                login(&logged, loggedUser);
                 break;
             case 2:
-                registerUser(&logged, &user);
+                registerUser(&logged, loggedUser);
                 break;
             default:
                 printf("❌ \033[31mOpção inválida!!!\033[0m\n");
@@ -98,15 +98,59 @@ void registerUser(int *logged, struct User *user)
 
     system("clear");
 
-    // VALIDAR IGUALDADE COM A SENHA
+    while (user->cursoId < 1 || user->cursoId > 2)
+    {
+        printf("1 - TADS: \n");
+        printf("2 - REDES: \n");
+        printf("Selecione uma opção de curso: ");
 
-    // VERIFICAR SE USUARIO JA EXISTE PELO EMAIL
+        scanf("%d", &user->cursoId);
 
-    // TUDO VALIDO - CADASTRAR NO BANCO
-    FILE *bdUser = fopen("users.txt", "a");
-    fprintf(bdUser, "\n%s,", user->name);
+        system("clear");
+        showError("Opção Inválida");
+    }
+
+    system("clear");
+
+    while (user->periodo < 1 || user->periodo > 6)
+    {
+        printf("Período (1-6): ");
+
+        scanf("%d", &user->periodo);
+
+        system("clear");
+        showError("Opção Inválida");
+    }
+
+    system("clear");
+
+    char line[200];
+    user->id = 1;
+
+    FILE *bdUser = fopen("users.txt", "a+");
+
+    if (bdUser != NULL)
+    {
+        while (fgets(line, sizeof(line), bdUser))
+        {
+            user->id++;
+        }
+    }
+
+    rewind(bdUser);
+
+    if (user->id > 1)
+    {
+        fprintf(bdUser, "\n");
+    }
+
+    fprintf(bdUser, "IDUSUARIO: %ld,", user->id);
+    fprintf(bdUser, "CURSOID: %d,", user->cursoId);
+    fprintf(bdUser, "PERIODO: %d,", user->periodo);
+    fprintf(bdUser, "%s,", user->name);
     fprintf(bdUser, "%s,", user->email);
     fprintf(bdUser, "%s", user->password);
+
     fclose(bdUser);
 
     *logged = 1;
@@ -138,7 +182,7 @@ void login(int *logged, struct User *user)
     {
         char sName[200], sEmail[200], sPass[200];
 
-        sscanf(line, "%[^,],%[^,],%s", sName, sEmail, sPass);
+        sscanf(line, "IDUSUARIO: %ld,CURSOID: %d, PERIODO: %d,%[^,],%[^,],%s", &user->id, &user->cursoId, &user->periodo, sName, sEmail, sPass);
 
         // printf("%s\n", line);
         // printf("%s\n", sEmail);

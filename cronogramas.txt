@@ -1,5 +1,7 @@
 
-IDUSUARIO: 1,Segunda,MATERIAS: {Redes de Computadores: 00:30,Estruturas de Dados: 00:30,Banco de Dados: 00:30,Redes de Computadores: 00:30,},
-IDUSUARIO: 1,Terça,MATERIAS: {Redes de Computadores: 00:30,Estruturas de Dados: 00:30,Banco de Dados: 00:30,Redes de Computadores: 00:30,},
-IDUSUARIO: 1,Quarta,MATERIAS: {Redes de Computadores: 00:30,Estruturas de Dados: 00:30,Banco de Dados: 00:30,Redes de Computadores: 00:30,},
-IDUSUARIO: 1,Quinta,MATERIAS: {Redes de Computadores: 00:30,Estruturas de Dados: 00:30,Banco de Dados: 00:30,Redes de Computadores: 00:30,},
+
+IDUSUARIO: 5,Segunda,MATERIAS: {Gestão de Projetos: 01:00,},
+IDUSUARIO: 5,Terça,MATERIAS: {Gestão de Projetos: 01:00,},
+IDUSUARIO: 5,Quarta,MATERIAS: {Gestão de Projetos: 01:00,},
+IDUSUARIO: 5,Quinta,MATERIAS: {Gestão de Projetos: 01:00,},
+IDUSUARIO: 5,Sexta,MATERIAS: {Gestão de Projetos: 01:00,},

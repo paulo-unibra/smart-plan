@@ -1,3 +1,5 @@
-
-asddsa sadasd,sadasd@saddas.com,Zz!8618190
-Paulo Ricardo,pr838908@gmail.com,Zz!8618190
+IDUSUARIO: 1,CURSOID: 1,PERIODO: 2Paulo Ricardo,pr838908@gmail.com,Zz!8618190,
+IDUSUARIO: 2,CURSOID: 1,PERIODO: 3,Vanessa SimÃµes,vanessa@gmail.com,Zz!8618190,
+IDUSUARIO: 3,CURSOID: 1,PERIODO: 4,Thaynan mendoenca,thay@gmail.com,Zz!8618190
+IDUSUARIO: 4,CURSOID: 2,PERIODO: 3, g—¤ý,teste-gmail@gmail.com,Zz!8618190
+IDUSUARIO: 5,CURSOID: 1,PERIODO: 4,Paulo Novo,paulo@gmail.com,Zz!8618190

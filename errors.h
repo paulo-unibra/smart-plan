@@ -3,6 +3,8 @@
 
 char *fileNotCreatedError();
 int showError(char *errorMessage);
+int showWarning(char *errorMessage);
 int showPasswordStrongError();
+int showInfo(char *message);
 
 #endif

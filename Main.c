@@ -1,11 +1,14 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
+#include <unistd.h>
 
 #include "helper.h"
 #include "errors.h"
 #include "validations.h"
 #include "./_Auth/login.h"
+#include "./_Cronogram/cronogram.h"
+#include "./_Materies/materies.h"
 
 void menuLogado()
 {
@@ -27,15 +30,6 @@ void menuLogado()
     // Lista todos os monitores nas materias que eu estou matriculado
 }
 
-struct Materia
-{
-    int id;
-    int cursoId;
-    char nome[255];
-    int periodo;
-    int escolhida;
-};
-
 int areadyCreated(int arr[], int size, int number)
 {
     for (int i = 0; i < size; i++)
@@ -45,99 +39,6 @@ int areadyCreated(int arr[], int size, int number)
             return 1;
         }
     }
-
-    return 0;
-}
-
-void getChoosenMateries(char **choosenMateriesNames, struct Materia *materias, int currentSizeMateries, int *choosenMateries, int currentSize)
-{
-    int countMateries = 0;
-
-    while (countMateries < currentSizeMateries)
-    {
-        int materiaIndex = choosenMateries[countMateries] - 1;
-
-        if (materiaIndex >= 0 && materiaIndex < currentSize)
-        {
-            printf("%s\n", materias[materiaIndex].nome);
-            materias[materiaIndex].escolhida = 1; // Marca como escolhida
-
-            choosenMateriesNames[countMateries] = materias[materiaIndex].nome;
-        }
-
-        countMateries++;
-    }
-}
-
-int showMateriesNames(int qCursoId, int qPeriodo, int *choosenMateries, int currentSizeMateries, char **choosenMateriesNames)
-{
-    FILE *file = fopen("materias.txt", "r");
-
-    char line[200];
-
-    int currentSize = 0;
-
-    int materiaId;
-    int idCurso;
-    char materia[30];
-    int periodo;
-    int count = 0;
-
-    if (file == NULL)
-    {
-        system("clear");
-        // fileNotCreatedError();
-        return 1;
-    }
-
-    int position = 0;
-
-    struct Materia *materias = (struct Materia *)malloc(currentSize * sizeof(struct Materia));
-
-    if (materias == NULL)
-    {
-        printf("Erro ao alocar memória.\n");
-        return 1;
-    }
-
-    while (fgets(line, sizeof(line), file))
-    {
-        sscanf(line, "ID: %d,IDCURSO: %d,MATERIA: %[^,],PERIODO: %d", &materiaId, &idCurso, materia, &periodo);
-
-        if (idCurso == qCursoId && periodo == qPeriodo)
-        {
-            currentSize++;
-
-            materias = (struct Materia *)realloc(materias, currentSize * sizeof(struct Materia));
-
-            materias[position].id = materiaId;
-            materias[position].cursoId = qCursoId;
-            strcpy(materias[position].nome, materia);
-            materias[position].periodo = periodo;
-
-            position++;
-        }
-    }
-
-    printf("========Matérias Escolhidas========\n");
-
-    getChoosenMateries(choosenMateriesNames, materias, currentSizeMateries, choosenMateries, currentSize);
-
-    printf("===================================\n");
-
-    count = 0;
-
-    while (count < currentSize - 1)
-    {
-        if (!materias[count].escolhida)
-        {
-            printf("%d - %s \n", count + 1, materias[count].nome);
-        }
-
-        count++;
-    }
-
-    fclose(file);
 
     return 0;
 }
@@ -188,111 +89,6 @@ void startStudies()
     set_nonblocking_mode(0);
 }
 
-int createCronogram()
-{
-    int contador = 0;
-    float horas;
-    int registerAgain = 1;
-    int *choosenMateries = NULL;
-    int currentSizeMateries = 0;
-
-    char **choosenMateriesNames = (char **)malloc(currentSizeMateries * sizeof(char *));
-
-    system("clear");
-
-    printf("===CRIAÇÃO DE CRONOGRAMA===\n\n");
-
-    while (registerAgain == 1)
-    {
-        system("clear");
-        printf("===CRIAÇÃO DE CRONOGRAMA===\n\n");
-
-        currentSizeMateries++;
-        choosenMateries = realloc(choosenMateries, currentSizeMateries * sizeof(int));
-        choosenMateriesNames = realloc(choosenMateriesNames, currentSizeMateries * sizeof(char *));
-
-        showMateriesNames(1, 2, choosenMateries, currentSizeMateries, choosenMateriesNames);
-
-        printf("Escolha um número de (1 - 6) para matéria: ");
-        scanf("%d", &choosenMateries[contador]);
-
-        system("clear");
-        printf("Cadastrado com sucesso!\n");
-        printf("Deseja cadastrar outra (1 - Sim | 2 - Não)? ");
-        scanf("%d", &registerAgain);
-        showMateriesNames(1, 2, choosenMateries, currentSizeMateries, choosenMateriesNames);
-        system("clear");
-
-        contador++;
-    }
-
-    printf("Horas disponíveis: ");
-    scanf("%f", &horas);
-
-    char diasSemana[5][30] = {"Segunda", "Terça", "Quarta", "Quinta", "Sexta"};
-    int i;
-    int count = 0;
-
-    FILE *file = fopen("cronogramas.txt", "a");
-
-    float horasMateria = horas / currentSizeMateries;
-
-    printf("CRIANDO...!\n");
-
-    for (i = 0; i < currentSizeMateries; i++)
-    {
-        fprintf(file, "\nIDUSUARIO: 1,");
-        fprintf(file, "%s,", diasSemana[i]);
-
-        fprintf(file, "MATERIAS: {");
-        count = 0;
-
-        while (count < currentSizeMateries)
-        {
-            fprintf(file, "%s: %s,", choosenMateriesNames[count], convertNumberToHours(horasMateria));
-            count++;
-        }
-
-        fprintf(file, "},");
-    }
-
-    fclose(file);
-
-    printf("CRONOGRAMA CRIADO!\n");
-    printf("====================\n");
-
-    return 0;
-}
-
-void consultCronogram()
-{
-
-    system("clear");
-
-    printf("===CONSULTAR CRONOGRAMA===\n");
-    char line[400];
-
-    FILE *file = fopen("cronogramas.txt", "r");
-
-    while (fgets(line, sizeof(line), file))
-    {
-        int idUsuario; // Mudar para int para capturar o IDUSUARIO
-        char materias[200] = "";
-        char diaSemana[20] = "";
-
-        sscanf(line, "IDUSUARIO: %d,%[^,],MATERIAS: {%[^\n}] ,", &idUsuario, diaSemana, materias);
-
-        printf("\033[1m\033[3m\033[34m%s\033[0m\n", diaSemana);
-
-        printf("- Matérias - \n");
-        printf("%s", replaceCommaWithNewline(materias));
-
-        printf("============================\n");
-    }
-
-    fclose(file);
-}
-
 void verificarDesempenho()
 {
     printf("VERIFICAR DESEMPENHO");
@@ -300,12 +96,12 @@ void verificarDesempenho()
 
 int main()
 {
-    menuLogin();
+    struct User loggedUser;
+
+    menuLogin(&loggedUser);
 
     int opcao = 5;
     system("clear");
-
-    // char loggedUser[200] = "ID: 1,NOME:Paulo,EMAIL:pr838908@gmail.com,SENHA:z8618190,IDCURSO: 1,PERIODO: 2";
 
     while (1)
     {
@@ -315,11 +111,11 @@ int main()
 
         if (opcao == 1)
         {
-            consultCronogram();
+            consultCronogram(&loggedUser);
         }
         else if (opcao == 2)
         {
-            createCronogram();
+            createCronogram(&loggedUser);
         }
         else if (opcao == 3)
         {
