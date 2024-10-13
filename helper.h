@@ -1,13 +1,18 @@
+#include <stdbool.h>
+
 #ifndef HELPER_H
 #define HELPER_H
 
 char *convertNumberToHours(float numberHour);
-void set_nonblocking_mode(int enable);
-char *replaceCommaWithNewline(char *str);
+int getChar();
 void useSecondsMicroseconds(int time);
 void sleepOS(int time);
 const char* verifyOperationalSystem();
 void cleanConsole();
-int getChar();
+void set_nonblocking_mode(int enable);
+#ifdef __linux__
+bool kbhit();
+#endif
+char *replaceCommaWithNewline(char *str);
 
 #endif

@@ -78,23 +78,23 @@ void cleanConsole()
 }
 
 #ifdef __linux__
-// void set_nonblocking_mode(int enable)
-// {
-//     struct termios t;
-//     tcgetattr(STDIN_FILENO, &t);
-//     if (enable)
-//     {
-//         t.c_lflag &= ~(ICANON | ECHO); // Desabilita modo canônico e eco
-//         tcsetattr(STDIN_FILENO, TCSANOW, &t);
-//         fcntl(STDIN_FILENO, F_SETFL, fcntl(STDIN_FILENO, F_GETFL) | O_NONBLOCK); // Modo não bloqueante
-//     }
-//     else
-//     {
-//         t.c_lflag |= (ICANON | ECHO); // Reativa o modo canônico e eco
-//         tcsetattr(STDIN_FILENO, TCSANOW, &t);
-//         fcntl(STDIN_FILENO, F_SETFL, fcntl(STDIN_FILENO, F_GETFL) & ~O_NONBLOCK); // Modo bloqueante
-//     }
-// }
+void set_nonblocking_mode(int enable)
+{
+    struct termios t;
+    tcgetattr(STDIN_FILENO, &t);
+    if (enable)
+    {
+        t.c_lflag &= ~(ICANON | ECHO); // Desabilita modo canônico e eco
+        tcsetattr(STDIN_FILENO, TCSANOW, &t);
+        fcntl(STDIN_FILENO, F_SETFL, fcntl(STDIN_FILENO, F_GETFL) | O_NONBLOCK); // Modo não bloqueante
+    }
+    else
+    {
+        t.c_lflag |= (ICANON | ECHO); // Reativa o modo canônico e eco
+        tcsetattr(STDIN_FILENO, TCSANOW, &t);
+        fcntl(STDIN_FILENO, F_SETFL, fcntl(STDIN_FILENO, F_GETFL) & ~O_NONBLOCK); // Modo bloqueante
+    }
+}
 
 bool kbhit() {
     struct termios oldt, newt;
