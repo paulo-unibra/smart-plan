@@ -3,12 +3,18 @@
 #include <stdlib.h>
 #include <unistd.h>
 
+#ifdef _WIN32
+#include <conio.h>
+#endif
+
 #include "helper.h"
 #include "errors.h"
 #include "validations.h"
 #include "./_Auth/login.h"
 #include "./_Cronogram/cronogram.h"
 #include "./_Materies/materies.h"
+
+const char* OPERATIONALSYSTEM;
 
 void menuLogado()
 {
@@ -45,6 +51,7 @@ int areadyCreated(int arr[], int size, int number)
 
 void startStudies()
 {
+    OPERATIONALSYSTEM = verifyOperationalSystem();
     int segundos = 0;
     int minutos = 0;
     int horas = 0;
@@ -61,15 +68,31 @@ void startStudies()
         printf("\n⏱︎  %02d:%02d:%02d\n", horas, minutos, segundos);
         printf("Aperte ESC para parar\n");
 
-        ch = getchar();
-        if (ch == 27)
-        { // Verifica se "Enter" foi pressionado
-            printf("==================================\n");
-            printf("Você estudou %02d:%02d:%02d...\n", horas, minutos, segundos);
-            printf("==================================\n");
-            break;
+        if(strcmp(OPERATIONALSYSTEM, "Windows") == 0)
+        {
+            if(kbhit()) {
+                ch = getChar();
+                if (ch == 27)
+                { // Verifica se "Enter" foi pressionado
+                    printf("==================================\n");
+                    printf("Você estudou %02d:%02d:%02d...\n", horas, minutos, segundos);
+                    printf("==================================\n");
+                    break;
+                }
+            }
+        } 
+        else 
+        {
+            ch = getChar();
+            if (ch == 27)
+            { // Verifica se "Enter" foi pressionado
+                printf("==================================\n");
+                printf("Você estudou %02d:%02d:%02d...\n", horas, minutos, segundos);
+                printf("==================================\n");
+                break;
+            }
         }
-
+        
         segundos++;
 
         if (segundos == 60)
