@@ -54,7 +54,7 @@ void startStudies()
 
     while (1)
     {
-        sleep(1);
+        sleepOS(1);
         cleanConsole();
 
         printf("Tempo de Estudo: ");
