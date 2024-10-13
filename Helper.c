@@ -1,8 +1,11 @@
 #include "helper.h"
 #include <stdio.h>
 #include <unistd.h>
-// #include <termios.h>
+#ifdef _WIN32
 #include <windows.h>
+#elif __linux__
+#include <termios.h>
+#endif
 #include <conio.h>
 #include <fcntl.h>
 #include <stdlib.h>
