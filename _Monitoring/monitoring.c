@@ -2,7 +2,10 @@
 #include <stdbool.h>
 
 #include "monitoring.h"
+#include "../_Auth/login.h"
+#include "../_Materies/materies.h"
 #include "../helper.h"
+
 /**
  * Monitoria*
  * cadastrar na monitoria
@@ -15,7 +18,7 @@
  * informar se tem monitor ou não)
  */
 
-void cadastrarNaMonitoria()
+void registerForMonitoring()
 {
     char materia[150];
     long contato;
@@ -24,7 +27,7 @@ void cadastrarNaMonitoria()
 
     do
     {
-        printf("Digite o nome da matéria:  \n1 - Matéria 1\n2 - Matéria 2\n3 - Matéria 3\n4 - Matéria 4");
+        printf("Digite o nome da matéria:  \n");
         scanf("%d", &opcao);
 
         switch(opcao)
@@ -49,7 +52,7 @@ void cadastrarNaMonitoria()
     cleanConsole();
     
     printf("\nDigite um número para contato:\n(81) ");
-    scanf("%d", &contato);
+    scanf("%ld", &contato);
     
     do
     {
