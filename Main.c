@@ -55,7 +55,7 @@ void startStudies()
     while (1)
     {
         sleep(1);
-        system("clear");
+        cleanConsole();
 
         printf("Tempo de Estudo: ");
         printf("\n⏱︎  %02d:%02d:%02d\n", horas, minutos, segundos);
@@ -96,12 +96,13 @@ void verificarDesempenho()
 
 int main()
 {
+    const char* OperationalSystem = verifyOperationalSystem();
     struct User loggedUser;
 
     menuLogin(&loggedUser);
 
     int opcao = 5;
-    system("clear");
+    cleanConsole();
 
     while (1)
     {
@@ -127,7 +128,7 @@ int main()
         }
         else
         {
-            system("clear");
+            cleanConsole();
             printf("❌ \033[31mOpção inválida!!!\033[0m\n");
 
             break;

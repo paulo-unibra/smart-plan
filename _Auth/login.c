@@ -5,6 +5,7 @@
 #include "login.h"
 #include "../errors.h"
 #include "../validations.h"
+#include "../helper.h"
 
 void initialMenu(int *option)
 {
@@ -49,7 +50,7 @@ void menuLogin(struct User *loggedUser)
         }
         else
         {
-            system("clear");
+            cleanConsole();
             printf("❌ \033[31mOpção inválida!!!\033[0m\n");
         }
     }
@@ -57,7 +58,7 @@ void menuLogin(struct User *loggedUser)
 
 void registerUser(int *logged, struct User *user)
 {
-    system("clear");
+    cleanConsole();
 
     printf("======CADASTRO=====\n");
 
@@ -66,18 +67,18 @@ void registerUser(int *logged, struct User *user)
         printf("Digite o nome do usuário: ");
         scanf(" %[^\n]", user->name);
 
-        system("clear");
+        cleanConsole();
         showError("Digite o nome completo");
     }
 
-    system("clear");
+    cleanConsole();
 
     while (!isValidEmail(user->email))
     {
         printf("Digite o e-mail do usuário: ");
         scanf(" %[^\n]", user->email);
 
-        system("clear");
+        cleanConsole();
         showError("E-mail inválido");
     }
 
@@ -92,11 +93,11 @@ void registerUser(int *logged, struct User *user)
         printf("Confirme a sua senha: ");
         scanf(" %[^\n]", user->conf_password);
 
-        system("clear");
+        cleanConsole();
         showError("Senha e confirmação precisam ser iguais!");
     }
 
-    system("clear");
+    cleanConsole();
 
     while (user->cursoId < 1 || user->cursoId > 2)
     {
@@ -106,11 +107,11 @@ void registerUser(int *logged, struct User *user)
 
         scanf("%d", &user->cursoId);
 
-        system("clear");
+        cleanConsole();
         showError("Opção Inválida");
     }
 
-    system("clear");
+    cleanConsole();
 
     while (user->periodo < 1 || user->periodo > 6)
     {
@@ -118,11 +119,11 @@ void registerUser(int *logged, struct User *user)
 
         scanf("%d", &user->periodo);
 
-        system("clear");
+        cleanConsole();
         showError("Opção Inválida");
     }
 
-    system("clear");
+    cleanConsole();
 
     char line[200];
     user->id = 1;
@@ -173,7 +174,7 @@ void login(int *logged, struct User *user)
 
     if (bdUser == NULL)
     {
-        system("clear");
+        cleanConsole();
         printf("%s", fileNotCreatedError());
         return;
     }
@@ -201,7 +202,7 @@ void login(int *logged, struct User *user)
     }
     else
     {
-        system("clear");
+        cleanConsole();
         printf("\033[31mE-MAIL E/OU SENHA INCORRETO(s)\033[0m\n");
     }
 
