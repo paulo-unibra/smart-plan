@@ -13,6 +13,7 @@
 #include "./_Auth/login.h"
 #include "./_Cronogram/cronogram.h"
 #include "./_Materies/materies.h"
+#include "./_Monitoring/monitoring.h"
 
 const char* OPERATIONALSYSTEM;
 
@@ -92,7 +93,7 @@ void startStudies()
                 break;
             }
         }
-        
+
         segundos++;
 
         if (segundos == 60)
@@ -148,6 +149,10 @@ int main()
         else if (opcao == 4)
         {
             verificarDesempenho();
+        }
+        else if(opcao == 5)
+        {
+            cadastrarNaMonitoria();
         }
         else
         {
