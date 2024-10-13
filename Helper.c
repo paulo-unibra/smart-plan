@@ -24,6 +24,17 @@ char *convertNumberToHours(float numberHour)
     return timeString;
 }
 
+
+// getchar adaptado para Windows...
+int getChar(){
+    #ifdef _WIN32
+    return getch();
+    #else
+    return getchar();
+    #endif
+}
+
+// Sleep de microsegundos adaptado...
 void useSecondsMicroseconds(int time)
 {
     #ifdef _WIN32
@@ -33,6 +44,7 @@ void useSecondsMicroseconds(int time)
     #endif
 }
 
+// Sleep de 1 segundo adaptado...
 void sleepOS(int time)
 {
     #ifdef _WIN32
@@ -66,23 +78,23 @@ void cleanConsole()
 }
 
 #ifdef __linux__
-void set_nonblocking_mode(int enable)
-{
-    struct termios t;
-    tcgetattr(STDIN_FILENO, &t);
-    if (enable)
-    {
-        t.c_lflag &= ~(ICANON | ECHO); // Desabilita modo canônico e eco
-        tcsetattr(STDIN_FILENO, TCSANOW, &t);
-        fcntl(STDIN_FILENO, F_SETFL, fcntl(STDIN_FILENO, F_GETFL) | O_NONBLOCK); // Modo não bloqueante
-    }
-    else
-    {
-        t.c_lflag |= (ICANON | ECHO); // Reativa o modo canônico e eco
-        tcsetattr(STDIN_FILENO, TCSANOW, &t);
-        fcntl(STDIN_FILENO, F_SETFL, fcntl(STDIN_FILENO, F_GETFL) & ~O_NONBLOCK); // Modo bloqueante
-    }
-}
+// void set_nonblocking_mode(int enable)
+// {
+//     struct termios t;
+//     tcgetattr(STDIN_FILENO, &t);
+//     if (enable)
+//     {
+//         t.c_lflag &= ~(ICANON | ECHO); // Desabilita modo canônico e eco
+//         tcsetattr(STDIN_FILENO, TCSANOW, &t);
+//         fcntl(STDIN_FILENO, F_SETFL, fcntl(STDIN_FILENO, F_GETFL) | O_NONBLOCK); // Modo não bloqueante
+//     }
+//     else
+//     {
+//         t.c_lflag |= (ICANON | ECHO); // Reativa o modo canônico e eco
+//         tcsetattr(STDIN_FILENO, TCSANOW, &t);
+//         fcntl(STDIN_FILENO, F_SETFL, fcntl(STDIN_FILENO, F_GETFL) & ~O_NONBLOCK); // Modo bloqueante
+//     }
+// }
 
 bool kbhit() {
     struct termios oldt, newt;
@@ -141,7 +153,7 @@ int main_helper() {
 
     while (1) {
         if (kbhit()) { // Verifica se há entrada pronta
-            char ch = getchar(); // Lê um caractere sem eco no console
+            char ch = getChar(); // Lê um caractere sem eco no console
             printf("Tecla pressionada: %c\n", ch);
             if (ch == 'q') // Pressione 'q' para sair
                 break; 
