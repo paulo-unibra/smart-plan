@@ -152,7 +152,7 @@ int main()
         }
         else if(opcao == 5)
         {
-            cadastrarNaMonitoria();
+            registerForMonitoring();
         }
         else
         {
