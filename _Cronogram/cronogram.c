@@ -89,12 +89,12 @@ int createCronogram(struct User *loggedUser)
         printf("Escolha um número de (1 - 6) para matéria: ");
         scanf("%d", &choosenMateries[contador]);
 
-        system("clear");
+        cleanConsole();
         printf("Cadastrado com sucesso!\n");
         printf("Deseja cadastrar outra (1 - Sim | 2 - Não)? ");
         scanf("%d", &registerAgain);
         showMateriesNames(loggedUser->cursoId, loggedUser->periodo, choosenMateries, currentSizeMateries, choosenMateriesNames);
-        system("clear");
+        cleanConsole();
 
         contador++;
     }
