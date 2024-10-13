@@ -3,13 +3,14 @@
 #include <unistd.h>
 #ifdef _WIN32
 #include <windows.h>
-#elif __linux__
+#include <conio.h>
+#else
 #include <termios.h>
 #endif
-#include <conio.h>
 #include <fcntl.h>
 #include <stdlib.h>
 #include <string.h>
+#include <stdbool.h>
 
 char *convertNumberToHours(float numberHour)
 {
@@ -21,6 +22,24 @@ char *convertNumberToHours(float numberHour)
     sprintf(timeString, "%02d:%02d", minutosEmHoras, minutosRestantes);
 
     return timeString;
+}
+
+void useSecondsMicroseconds(int time)
+{
+    #ifdef _WIN32
+    Sleep(time);
+    #else
+    usleep(time);
+    #endif
+}
+
+void sleepOS(int time)
+{
+    #ifdef _WIN32
+    Sleep(time * 1000);
+    #else
+    sleep(time);
+    #endif
 }
 
 // Função que verifica o Sistema Operacional...
@@ -36,7 +55,6 @@ const char* verifyOperationalSystem()
 // Função que limpa o console...
 void cleanConsole()
 {
-    printf("executando...");
     const char* operationalSystem = verifyOperationalSystem();
     if(strcmp(operationalSystem, "Windows") == 0)
     {
@@ -47,23 +65,48 @@ void cleanConsole()
     }
 }
 
-// void set_nonblocking_mode(int enable)
-// {
-//     struct termios t;
-//     tcgetattr(STDIN_FILENO, &t);
-//     if (enable)
-//     {
-//         t.c_lflag &= ~(ICANON | ECHO); // Desabilita modo canônico e eco
-//         tcsetattr(STDIN_FILENO, TCSANOW, &t);
-//         fcntl(STDIN_FILENO, F_SETFL, fcntl(STDIN_FILENO, F_GETFL) | O_NONBLOCK); // Modo não bloqueante
-//     }
-//     else
-//     {
-//         t.c_lflag |= (ICANON | ECHO); // Reativa o modo canônico e eco
-//         tcsetattr(STDIN_FILENO, TCSANOW, &t);
-//         fcntl(STDIN_FILENO, F_SETFL, fcntl(STDIN_FILENO, F_GETFL) & ~O_NONBLOCK); // Modo bloqueante
-//     }
-// }
+#ifdef __linux__
+void set_nonblocking_mode(int enable)
+{
+    struct termios t;
+    tcgetattr(STDIN_FILENO, &t);
+    if (enable)
+    {
+        t.c_lflag &= ~(ICANON | ECHO); // Desabilita modo canônico e eco
+        tcsetattr(STDIN_FILENO, TCSANOW, &t);
+        fcntl(STDIN_FILENO, F_SETFL, fcntl(STDIN_FILENO, F_GETFL) | O_NONBLOCK); // Modo não bloqueante
+    }
+    else
+    {
+        t.c_lflag |= (ICANON | ECHO); // Reativa o modo canônico e eco
+        tcsetattr(STDIN_FILENO, TCSANOW, &t);
+        fcntl(STDIN_FILENO, F_SETFL, fcntl(STDIN_FILENO, F_GETFL) & ~O_NONBLOCK); // Modo bloqueante
+    }
+}
+
+bool kbhit() {
+    struct termios oldt, newt;
+    int oldf;
+    char ch;
+    bool isPressed = false;
+
+    tcgetattr(STDIN_FILENO, &oldt);
+    newt = oldt;
+    newt.c_lflag &= ~(ICANON | ECHO); // Desabilita modo canônico e eco
+    tcsetattr(STDIN_FILENO, TCSANOW, &newt);
+    oldf = fcntl(STDIN_FILENO, F_GETFL, 0);
+    fcntl(STDIN_FILENO, F_SETFL, oldf | O_NONBLOCK);
+
+    if (read(STDIN_FILENO, &ch, 1) > 0) {
+        isPressed = true;
+    }
+
+    tcsetattr(STDIN_FILENO, TCSANOW, &oldt);
+    fcntl(STDIN_FILENO, F_SETFL, oldf);
+    return isPressed;
+}
+
+#else
 
 void set_nonblocking_mode(int enable) {
     HANDLE hStdin = GetStdHandle(STD_INPUT_HANDLE); // Obter o handle do console
@@ -88,19 +131,22 @@ void set_nonblocking_mode(int enable) {
     SetConsoleMode(hStdin, mode);
 }
 
+#endif
+
+
 int main_helper() {
-    // Exemplo de uso para desabilitar modo canônico e eco
     set_nonblocking_mode(1);
 
     printf("Modo não bloqueante e sem eco ativado. Pressione algo...\n");
 
     while (1) {
-        if (_kbhit()) { // Verifica se há entrada pronta
-            char ch = _getch(); // Pega a tecla sem eco no console
+        if (kbhit()) { // Verifica se há entrada pronta
+            char ch = getchar(); // Lê um caractere sem eco no console
             printf("Tecla pressionada: %c\n", ch);
-            if (ch == 'q') break; // Pressione 'q' para sair
+            if (ch == 'q') // Pressione 'q' para sair
+                break; 
         }
-        Sleep(100); // Pausa breve para evitar sobrecarregar a CPU
+        useSecondsMicroseconds(100000); // Pausa breve para evitar sobrecarregar a CPU (100ms)
     }
 
     // Reativar o modo canônico e eco antes de sair
