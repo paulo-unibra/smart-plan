@@ -2,6 +2,8 @@
 #include <stdlib.h>
 #include <string.h>
 
+#include "../helper.h"
+
 #include "materies.h"
 
 void getChoosenMateries(char **choosenMateriesNames, struct Materia *materias, int currentSizeMateries, int *choosenMateries, int currentSize)
@@ -40,7 +42,7 @@ int showMateriesNames(int qCursoId, int qPeriodo, int *choosenMateries, int curr
 
     if (file == NULL)
     {
-        system("clear");
+        cleanConsole();
         return 1;
     }
 
