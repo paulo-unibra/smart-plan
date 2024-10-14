@@ -13,6 +13,9 @@
         "errors.h": "c",
         "helper.h": "c",
         "cronogram.h": "c",
-        "materies.h": "c"
+        "materies.h": "c",
+        "study.h": "c",
+        "system_error": "c",
+        "stdbool.h": "c"
     }
 }

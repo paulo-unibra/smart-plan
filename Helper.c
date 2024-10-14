@@ -43,13 +43,13 @@ void sleepOS(int time)
 }
 
 // Função que verifica o Sistema Operacional...
-const char* verifyOperationalSystem()
+const char *verifyOperationalSystem()
 {
-    #ifdef _WIN32
-        return "Windows";
-    #elif __linux__
-        return "Linux";
-    #endif
+#ifdef _WIN32
+    return "Windows";
+#elif __linux__
+    return "Linux";
+#endif
 }
 
 // Função que limpa o console...
@@ -59,7 +59,8 @@ void cleanConsole()
     if(strcmp(operationalSystem, "Windows") == 0)
     {
         system("cls");
-    } else if(strcmp(operationalSystem, "Linux") == 0)
+    }
+    else if (strcmp(operationalSystem, "Linux") == 0)
     {
         system("clear");
     }
@@ -109,6 +110,8 @@ bool kbhit() {
 #else
 
 void set_nonblocking_mode(int enable) {
+#ifdef _WIN32
+    // Código para Windows
     HANDLE hStdin = GetStdHandle(STD_INPUT_HANDLE); // Obter o handle do console
     DWORD mode;
 
@@ -129,6 +132,29 @@ void set_nonblocking_mode(int enable) {
 
     // Definir o novo modo do console
     SetConsoleMode(hStdin, mode);
+#endif
+}
+
+bool kbhit() {
+    struct termios oldt, newt;
+    int oldf;
+    char ch;
+    bool isPressed = false;
+
+    tcgetattr(STDIN_FILENO, &oldt);
+    newt = oldt;
+    newt.c_lflag &= ~(ICANON | ECHO); // Desabilita modo canônico e eco
+    tcsetattr(STDIN_FILENO, TCSANOW, &newt);
+    oldf = fcntl(STDIN_FILENO, F_GETFL, 0);
+    fcntl(STDIN_FILENO, F_SETFL, oldf | O_NONBLOCK);
+
+    if (read(STDIN_FILENO, &ch, 1) > 0) {
+        isPressed = true;
+    }
+
+    tcsetattr(STDIN_FILENO, TCSANOW, &oldt);
+    fcntl(STDIN_FILENO, F_SETFL, oldf);
+    return isPressed;
 }
 
 #endif
@@ -169,4 +195,9 @@ char *replaceCommaWithNewline(char *str)
     }
 
     return original;
+}
+
+void showHeader(char *str)
+{
+    printf("\033[3;1;36m=== %s ===\033[0m\n\n", str);
 }
