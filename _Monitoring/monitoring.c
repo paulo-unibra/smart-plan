@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdbool.h>
+#include <string.h>
 
 #include "monitoring.h"
 #include "../_Auth/login.h"
@@ -17,9 +18,23 @@
  * porém, cada matéria cadastrada precisa 
  * informar se tem monitor ou não)
  */
+const char* OPERATIONALSYSTEM;
 
 void registerForMonitoring()
 {
+    OPERATIONALSYSTEM = verifyOperationalSystem();
+    FILE *file;
+    char pathDirectory[30];
+    if(strcmp(OPERATIONALSYSTEM, "Windows") == 0)
+    {
+      strcpy(pathDirectory, ".\\monitoring.txt");
+      file = fopen(pathDirectory, "w");
+    }
+    else
+    {
+      file = fopen("./monitoring.txt", "w");
+    }
+    
     char materia[150];
     long contato;
     int hora, minuto = 0, opcao;
@@ -85,9 +100,10 @@ void registerForMonitoring()
         cleanConsole();
         printf("Horário disponível %.2d:%.2d está certo? \n1 - Sim\n2 - Não\n", hora, minuto);
         scanf("%d", &opcao);
-        
         if(opcao == 1)
         {
+          fprintf(file, "CONTATO: %ld, HORA DISPONÍVEL: %.2d:%.2d", contato, hora, minuto);
+          fclose(file);
           repetirAcao = false;
           break;
         }
