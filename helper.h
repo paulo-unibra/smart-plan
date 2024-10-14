@@ -8,5 +8,6 @@ void useSecondsMicroseconds(int time);
 void sleepOS(int time);
 const char* verifyOperationalSystem();
 void cleanConsole();
+void showHeader(char *str);
 
 #endif

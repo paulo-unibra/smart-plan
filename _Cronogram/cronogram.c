@@ -49,14 +49,16 @@ int removeCurrentCronogram(struct User *loggedUser)
 
 int createCronogram(struct User *loggedUser)
 {
-    int contador = 0;
+    int count = 0;
     float horas;
     int registerAgain = 1;
     int *choosenMateries = NULL;
     int currentSizeMateries = 0;
+    int currentSizeToChoseMateries = 0;
     int deleteCurrentCronogram = 0;
 
     char **choosenMateriesNames = (char **)malloc(currentSizeMateries * sizeof(char *));
+    struct Materia *materias = (struct Materia *)malloc(0 * sizeof(struct Materia));
 
     system("clear");
 
@@ -75,36 +77,50 @@ int createCronogram(struct User *loggedUser)
         removeCurrentCronogram(loggedUser);
     }
 
-    while (registerAgain == 1)
+    prepareMateries(loggedUser->cursoId, loggedUser->periodo, &currentSizeMateries, &materias);
+
+    while (registerAgain == 1)  
     {
         system("clear");
         printf("===CRIAÇÃO DE CRONOGRAMA===\n\n");
 
-        currentSizeMateries++;
+        showMateriesNames(currentSizeMateries, materias);
+
+        currentSizeToChoseMateries++;
         choosenMateries = realloc(choosenMateries, currentSizeMateries * sizeof(int));
-        choosenMateriesNames = realloc(choosenMateriesNames, currentSizeMateries * sizeof(char *));
+        choosenMateriesNames = realloc(choosenMateriesNames, currentSizeToChoseMateries * sizeof(char *));
 
-        showMateriesNames(loggedUser->cursoId, loggedUser->periodo, choosenMateries, currentSizeMateries, choosenMateriesNames);
+        printf("========Matérias Escolhidas========\n");
 
+        prepareChoosenMateries(choosenMateriesNames, materias, currentSizeMateries, choosenMateries);
+        showChosenMateries(materias, currentSizeMateries);
+        
+        printf("===================================\n");
+
+
+        printf("%d", count);
         printf("Escolha um número de (1 - 6) para matéria: ");
-        scanf("%d", &choosenMateries[contador]);
+        scanf("%d", &choosenMateries[count]);
 
         system("clear");
         printf("Cadastrado com sucesso!\n");
         printf("Deseja cadastrar outra (1 - Sim | 2 - Não)? ");
         scanf("%d", &registerAgain);
-        showMateriesNames(loggedUser->cursoId, loggedUser->periodo, choosenMateries, currentSizeMateries, choosenMateriesNames);
+        // showMateriesNames(loggedUser->cursoId, loggedUser->periodo, currentSizeMateries, materias);
         system("clear");
 
-        contador++;
+
+        count++;
     }
+
+
 
     printf("Horas disponíveis: ");
     scanf("%f", &horas);
 
     char diasSemana[5][30] = {"Segunda", "Terça", "Quarta", "Quinta", "Sexta"};
     int i;
-    int count = 0;
+    count = 0;
 
     FILE *file = fopen("cronogramas.txt", "a");
 
@@ -116,7 +132,6 @@ int createCronogram(struct User *loggedUser)
     {
         fprintf(file, "\nIDUSUARIO: %ld,", loggedUser->id);
         fprintf(file, "%s,", diasSemana[i]);
-        printf("TESTE");
 
         fprintf(file, "MATERIAS: {");
         count = 0;
