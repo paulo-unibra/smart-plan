@@ -115,7 +115,7 @@ void startStudies()
 
 void verificarDesempenho()
 {
-    printf("VERIFICAR DESEMPENHO");
+    printf("VERIFICAR DESEMPENHO\n");
 }
 
 int main()
