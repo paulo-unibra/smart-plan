@@ -12,6 +12,8 @@
 #include <string.h>
 #include <stdbool.h>
 
+bool blocking_modeOnOff = false;
+
 char *convertNumberToHours(float numberHour)
 {
     static char timeString[6];
@@ -140,6 +142,22 @@ void set_nonblocking_mode(int enable) {
     }
 
     // Definir o novo modo do console
+    SetConsoleMode(hStdin, mode);
+}
+
+void blocking_mode(){
+    blocking_modeOnOff = !blocking_modeOnOff;
+    HANDLE hStdin = GetStdHandle(STD_INPUT_HANDLE);
+    DWORD mode;
+
+    if(blocking_modeOnOff == true)
+    {
+        mode &= ~(ENABLE_LINE_INPUT | ENABLE_ECHO_INPUT);
+    }
+    else
+    {
+        mode |= (ENABLE_LINE_INPUT | ENABLE_ECHO_INPUT);
+    }
     SetConsoleMode(hStdin, mode);
 }
 
