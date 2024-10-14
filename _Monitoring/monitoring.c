@@ -6,6 +6,7 @@
 #include "../_Auth/login.h"
 #include "../_Materies/materies.h"
 #include "../helper.h"
+#include "../main.h"
 
 /**
  * Monitoria*
@@ -19,15 +20,17 @@
  * informar se tem monitor ou não)
  */
 const char* OPERATIONALSYSTEM;
+bool accountCreated = false;
 
 void registerForMonitoring()
 {
+    cleanConsole();
     OPERATIONALSYSTEM = verifyOperationalSystem();
     FILE *file;
     char pathDirectory[30];
     if(strcmp(OPERATIONALSYSTEM, "Windows") == 0)
     {
-      strcpy(pathDirectory, ".\\monitoring.txt");
+      strcpy(pathDirectory, "..\\monitoring.txt");
       file = fopen(pathDirectory, "w");
     }
     else
@@ -102,11 +105,37 @@ void registerForMonitoring()
         scanf("%d", &opcao);
         if(opcao == 1)
         {
-          fprintf(file, "CONTATO: %ld, HORA DISPONÍVEL: %.2d:%.2d", contato, hora, minuto);
+          fprintf(file, "CONTATO: %ld,", contato);
+          fprintf(file, "HORA DISPONÍVEL: %d:%d", hora, minuto);
+          fprintf(file, "\n");
           fclose(file);
+          accountCreated = !accountCreated;
           repetirAcao = false;
           break;
         }
         
     }while(repetirAcao);
+}
+
+void verifyAccountCreated()
+{
+  int newRegister;
+  if(accountCreated == true)
+  {
+    printf("Você já está cadastrado na monitoria.\nSe continuar essa ação seus antigos registros serão perdidos\nDeseja continuar?\n1 - Sim\n2 - Não\nResposta: ");
+    scanf("%d", &newRegister);
+    if(newRegister == 1)
+    {
+      registerForMonitoring();
+    }
+    else if(newRegister == 2)
+    {
+      accountCreated = !accountCreated;
+      menuLogado();
+    }
+  }
+  else
+  {
+    registerForMonitoring();
+  }
 }

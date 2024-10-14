@@ -2,5 +2,5 @@
 #define MONITORING_H
 
 void registerForMonitoring();
-
+void verifyAccountCreated();
 #endif
