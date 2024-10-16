@@ -85,7 +85,7 @@ int main()
         }
         else if(opcao == 5)
         {
-            verifyAccountCreated();
+            verifyAccountCreated(&loggedUser);
         }
         else
         {
