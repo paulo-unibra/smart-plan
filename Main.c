@@ -1,7 +1,6 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
-#include <unistd.h>
 
 #ifdef _WIN32
 #include <conio.h>
@@ -13,9 +12,11 @@
 #include "./_Auth/login.h"
 #include "./_Cronogram/cronogram.h"
 #include "./_Materies/materies.h"
+
 #include "./_Monitoring/monitoring.h"
 
-const char* OPERATIONALSYSTEM;
+#include "./_Study/study.h"
+
 
 void menuLogado()
 {
@@ -50,74 +51,6 @@ int areadyCreated(int arr[], int size, int number)
     return 0;
 }
 
-void startStudies()
-{
-    OPERATIONALSYSTEM = verifyOperationalSystem();
-    int segundos = 0;
-    int minutos = 0;
-    int horas = 0;
-    char ch;
-
-    set_nonblocking_mode(1);
-
-    while (1)
-    {
-        sleepOS(1);
-        cleanConsole();
-
-        printf("Tempo de Estudo: ");
-        printf("\n⏱︎  %02d:%02d:%02d\n", horas, minutos, segundos);
-        printf("Aperte ESC para parar\n");
-
-        if(strcmp(OPERATIONALSYSTEM, "Windows") == 0)
-        {
-            if(kbhit()) {
-                ch = getChar();
-                if (ch == 27)
-                { // Verifica se "Enter" foi pressionado
-                    printf("==================================\n");
-                    printf("Você estudou %02d:%02d:%02d...\n", horas, minutos, segundos);
-                    printf("==================================\n");
-                    break;
-                }
-            }
-        } 
-        else 
-        {
-            ch = getChar();
-            if (ch == 27)
-            { // Verifica se "Enter" foi pressionado
-                printf("==================================\n");
-                printf("Você estudou %02d:%02d:%02d...\n", horas, minutos, segundos);
-                printf("==================================\n");
-                break;
-            }
-        }
-
-        segundos++;
-
-        if (segundos == 60)
-        {
-            minutos++;
-            segundos = 0;
-        }
-
-        if (minutos == 60)
-        {
-            horas++;
-            minutos = 0;
-            segundos = 0;
-        }
-    }
-
-    set_nonblocking_mode(0);
-}
-
-void verificarDesempenho()
-{
-    printf("VERIFICAR DESEMPENHO\n");
-}
-
 int main()
 {
     const char* OperationalSystem = verifyOperationalSystem();
@@ -144,11 +77,11 @@ int main()
         }
         else if (opcao == 3)
         {
-            startStudies();
+            startStudies(&loggedUser);
         }
         else if (opcao == 4)
         {
-            verificarDesempenho();
+            mountCompletePerformances(&loggedUser);
         }
         else if(opcao == 5)
         {

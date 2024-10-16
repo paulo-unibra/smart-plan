@@ -24,6 +24,7 @@ int showInfo(char *message)
     return 0;
 }
 
+
 int showPasswordStrongError()
 {
     // Mensagem inicial com ícone
