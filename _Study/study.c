@@ -172,6 +172,7 @@ void mountCompletePerformances(struct User *loggedUser)
 
     fclose(userQuestionFile);
 }
+
 int startStudies(struct User *loggedUser)
 {
 
