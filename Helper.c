@@ -201,3 +201,16 @@ void showHeader(char *str)
 {
     printf("\033[3;1;36m=== %s ===\033[0m\n\n", str);
 }
+
+
+int showSucces(char *message)
+{
+    printf("\033[3;1;32m%s\033[0m\n", message);
+    return 0;
+}
+
+int showDanger(char *errorMessage)
+{
+    printf("\033[3;1;31m%s\033[0m\n", errorMessage);
+    return 0;
+}

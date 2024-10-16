@@ -9,5 +9,7 @@ void sleepOS(int time);
 const char* verifyOperationalSystem();
 void cleanConsole();
 void showHeader(char *str);
+int showSucces(char *message);
+int showDanger(char *errorMessage);
 
 #endif

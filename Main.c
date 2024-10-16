@@ -43,11 +43,6 @@ int areadyCreated(int arr[], int size, int number)
     return 0;
 }
 
-void verificarDesempenho()
-{
-    printf("VERIFICAR DESEMPENHO");
-}
-
 int main()
 {
     const char* OperationalSystem = verifyOperationalSystem();
@@ -78,7 +73,7 @@ int main()
         }
         else if (opcao == 4)
         {
-            verificarDesempenho();
+            mountCompletePerformances(&loggedUser);
         }
         else
         {
