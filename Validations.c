@@ -131,3 +131,8 @@ int isValidOptionLogin(int *option)
 {
     return (*option == 1 || *option == 2);
 }
+
+int isValidTwoOption(int *option)
+{
+    return (*option == 1 || *option == 2);
+}

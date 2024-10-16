@@ -57,13 +57,13 @@ void sleepOS(int time)
 }
 
 // Função que verifica o Sistema Operacional...
-const char* verifyOperationalSystem()
+const char *verifyOperationalSystem()
 {
-    #ifdef _WIN32
-        return "Windows";
-    #elif __linux__
-        return "Linux";
-    #endif
+#ifdef _WIN32
+    return "Windows";
+#elif __linux__
+    return "Linux";
+#endif
 }
 
 // Função que limpa o console...
@@ -73,7 +73,8 @@ void cleanConsole()
     if(strcmp(operationalSystem, "Windows") == 0)
     {
         system("cls");
-    } else if(strcmp(operationalSystem, "Linux") == 0)
+    }
+    else if (strcmp(operationalSystem, "Linux") == 0)
     {
         system("clear");
     }
@@ -123,6 +124,8 @@ bool kbhit() {
 #else
 
 void set_nonblocking_mode(int enable) {
+#ifdef _WIN32
+    // Código para Windows
     HANDLE hStdin = GetStdHandle(STD_INPUT_HANDLE); // Obter o handle do console
     DWORD mode;
 
@@ -143,6 +146,7 @@ void set_nonblocking_mode(int enable) {
 
     // Definir o novo modo do console
     SetConsoleMode(hStdin, mode);
+#endif
 }
 
 void blocking_mode(){
@@ -199,4 +203,22 @@ char *replaceCommaWithNewline(char *str)
     }
 
     return original;
+}
+
+void showHeader(char *str)
+{
+    printf("\033[3;1;36m=== %s ===\033[0m\n\n", str);
+}
+
+
+int showSucces(char *message)
+{
+    printf("\033[3;1;32m%s\033[0m\n", message);
+    return 0;
+}
+
+int showDanger(char *errorMessage)
+{
+    printf("\033[3;1;31m%s\033[0m\n", errorMessage);
+    return 0;
 }

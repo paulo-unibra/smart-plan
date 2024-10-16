@@ -13,7 +13,8 @@
     "errors.h": "c",
     "helper.h": "c",
     "cronogram.h": "c",
-    "materies.h": "c"
+    "materies.h": "c",
+    "conio.h": "c"
   },
   "C_Cpp_Runner.cCompilerPath": "gcc",
   "C_Cpp_Runner.cppCompilerPath": "g++",

@@ -1,6 +1,7 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 
 #include "../_Auth/login.h"
 #include "../_Materies/materies.h"
@@ -10,10 +11,10 @@
 
 int removeCurrentCronogram(struct User *loggedUser)
 {
-    char filename[50] = "cronogramas.txt";
+    char filename[50] = "_Cronogram/cronogramas.txt";
 
-    FILE *file = fopen("cronogramas.txt", "r");
-    FILE *tempFile = fopen("temp.txt", "w");
+    FILE *file = fopen("_Cronogram/cronogramas.txt", "r");
+    FILE *tempFile = fopen("_Cronogram/temp.txt", "w");
 
     char line[200];
     int currentLine = 1;
@@ -32,6 +33,7 @@ int removeCurrentCronogram(struct User *loggedUser)
 
         sscanf(line, "IDUSUARIO: %d,%[^,],MATERIAS: {%[^\n}] ,", &idUsuario, diaSemana, materias);
 
+
         if (idUsuario != loggedUser->id)
         {
             fputs(line, tempFile);
@@ -44,21 +46,20 @@ int removeCurrentCronogram(struct User *loggedUser)
     fclose(tempFile);
 
     remove(filename);
-    rename("temp.txt", filename);
+    rename("_Cronogram/temp.txt", filename);
 }
 
 int createCronogram(struct User *loggedUser)
 {
-    int contador = 0;
+    int count = 0;
     float horas;
     int registerAgain = 1;
     int *choosenMateries = NULL;
     int currentSizeMateries = 0;
+    int currentSizeToChoseMateries = 0;
     int deleteCurrentCronogram = 0;
 
-    char **choosenMateriesNames = (char **)malloc(currentSizeMateries * sizeof(char *));
-
-    system("clear");
+    cleanConsole();
 
     if (hasAlreadyCreatedCronogram(loggedUser))
     {
@@ -75,28 +76,58 @@ int createCronogram(struct User *loggedUser)
         removeCurrentCronogram(loggedUser);
     }
 
-    while (registerAgain == 1)
+    struct Materia *materias = NULL;
+    prepareMateries(loggedUser->cursoId, loggedUser->periodo, &currentSizeMateries, &materias);
+
+    choosenMateries = (int *)malloc(currentSizeMateries * sizeof(int));
+    if (choosenMateries == NULL)
     {
-        system("clear");
+        printf("Erro ao alocar memória!\n");
+        return 1;
+    }
+
+    char **choosenMateriesNames = (char **)malloc(currentSizeMateries * sizeof(char *));
+    if (choosenMateriesNames == NULL)
+    {
+        printf("Erro ao alocar memória!\n");
+        free(choosenMateries);
+        return 1;
+    }
+
+    while (registerAgain == 1)  
+    {
+        // system("clear");
         printf("===CRIAÇÃO DE CRONOGRAMA===\n\n");
 
-        currentSizeMateries++;
-        choosenMateries = realloc(choosenMateries, currentSizeMateries * sizeof(int));
-        choosenMateriesNames = realloc(choosenMateriesNames, currentSizeMateries * sizeof(char *));
+        showMateriesNames(currentSizeMateries, materias);
 
-        showMateriesNames(loggedUser->cursoId, loggedUser->periodo, choosenMateries, currentSizeMateries, choosenMateriesNames);
+        printf("========Matérias Escolhidas========\n");
 
-        printf("Escolha um número de (1 - 6) para matéria: ");
-        scanf("%d", &choosenMateries[contador]);
+        prepareChoosenMateries(choosenMateriesNames, materias, currentSizeMateries, choosenMateries);
+        showChosenMateries(materias, currentSizeMateries);
+        
+        printf("===================================\n");
 
-        cleanConsole();
+        printf("Escolha um número de (1 - %d) para matéria: ", currentSizeMateries);
+        scanf("%d", &choosenMateries[count]);
+
+        int chosenIndex = choosenMateries[count] - 1;  // Corrige o índice (se a escolha é de 1 a currentSizeMateries)
+        if (chosenIndex >= 0 && chosenIndex < currentSizeMateries)
+        {
+            choosenMateriesNames[count] = strdup(materias[chosenIndex].nome);
+        }
+        else
+        {
+            printf("Escolha inválida!\n");
+            continue;
+        }
+
+        system("clear");
         printf("Cadastrado com sucesso!\n");
         printf("Deseja cadastrar outra (1 - Sim | 2 - Não)? ");
         scanf("%d", &registerAgain);
-        showMateriesNames(loggedUser->cursoId, loggedUser->periodo, choosenMateries, currentSizeMateries, choosenMateriesNames);
-        cleanConsole();
-
-        contador++;
+        
+        count++;
     }
 
     printf("Horas disponíveis: ");
@@ -104,9 +135,13 @@ int createCronogram(struct User *loggedUser)
 
     char diasSemana[5][30] = {"Segunda", "Terça", "Quarta", "Quinta", "Sexta"};
     int i;
-    int count = 0;
 
-    FILE *file = fopen("cronogramas.txt", "a");
+    FILE *file = fopen("_Cronogram/cronogramas.txt", "a");
+    if (file == NULL)
+    {
+        printf("Erro ao abrir o arquivo!\n");
+        return 1;
+    }
 
     float horasMateria = horas / currentSizeMateries;
 
@@ -116,21 +151,25 @@ int createCronogram(struct User *loggedUser)
     {
         fprintf(file, "\nIDUSUARIO: %ld,", loggedUser->id);
         fprintf(file, "%s,", diasSemana[i]);
-        printf("TESTE");
 
         fprintf(file, "MATERIAS: {");
-        count = 0;
-
-        while (count < currentSizeMateries)
+        for (int j = 0; j < count; j++)
         {
-            fprintf(file, "%s: %s,", choosenMateriesNames[count], convertNumberToHours(horasMateria));
-            count++;
+            fprintf(file, "%s: %s,", choosenMateriesNames[j], convertNumberToHours(horasMateria));
         }
-
         fprintf(file, "},");
     }
 
     fclose(file);
+
+    // // Libera a memória alocada
+    // for (int j = 0; j < count; j++)
+    // {
+    //     free(choosenMateriesNames[j]);
+    // }ajustar
+    free(choosenMateriesNames);
+    free(choosenMateries);
+    free(materias);
 
     printf("CRONOGRAMA CRIADO!\n");
     printf("====================\n");
@@ -141,12 +180,12 @@ int createCronogram(struct User *loggedUser)
 void consultCronogram(struct User *loggedUser)
 {
 
-    system("clear");
+    cleanConsole();
 
     printf("===CONSULTAR CRONOGRAMA===\n");
     char line[400];
 
-    FILE *file = fopen("cronogramas.txt", "r");
+    FILE *file = fopen("_Cronogram/cronogramas.txt", "r");
 
     while (fgets(line, sizeof(line), file))
     {
@@ -172,11 +211,11 @@ void consultCronogram(struct User *loggedUser)
 
 int hasAlreadyCreatedCronogram(struct User *loggedUser)
 {
-    system("clear");
+    cleanConsole();
 
     char line[400];
 
-    FILE *file = fopen("cronogramas.txt", "r");
+    FILE *file = fopen("_Cronogram/cronogramas.txt", "r");
 
     while (fgets(line, sizeof(line), file))
     {

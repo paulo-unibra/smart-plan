@@ -1,6 +1,6 @@
 #ifndef MONITORING_H
 #define MONITORING_H
 
-void registerForMonitoring();
-void verifyAccountCreated();
+
+void verifyAccountCreated(struct User *loggedUser);
 #endif

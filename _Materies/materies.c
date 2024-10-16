@@ -4,21 +4,48 @@
 
 #include "../helper.h"
 
-#include "materies.h"
+#include "../_Auth/login.h"
 
-void getChoosenMateries(char **choosenMateriesNames, struct Materia *materias, int currentSizeMateries, int *choosenMateries, int currentSize)
+#include "materies.h"
+#include "../helper.h"
+#include "../errors.h"
+
+struct Materia handleChoseMatter(struct User *loggedUser)
+{
+    int currentSizeMateries = 0;
+    struct Materia *materias = (struct Materia *)malloc(0 * sizeof(struct Materia));
+    int chosenMatter;
+
+    prepareMateries(loggedUser->cursoId, loggedUser->periodo, &currentSizeMateries, &materias);
+
+    while (chosenMatter < 1 || chosenMatter > currentSizeMateries)
+    {
+
+        showMateriesNames(currentSizeMateries, materias);
+
+        printf("Escolha uma matéria: ");
+        scanf("%d", &chosenMatter);
+        cleanConsole();
+
+        showError("Opção Inválida");
+    }
+
+    cleanConsole();
+
+    return materias[chosenMatter - 1];
+}
+
+void prepareChoosenMateries(char **choosenMateriesNames, struct Materia *materias, int currentSizeMateries, int *choosenMateries)
 {
     int countMateries = 0;
 
     while (countMateries < currentSizeMateries)
     {
-        int materiaIndex = choosenMateries[countMateries] - 1;
+        int materiaIndex = choosenMateries[countMateries] - 1; // Ajustar para índice baseado em 0
 
-        if (materiaIndex >= 0 && materiaIndex < currentSize && materias[materiaIndex].escolhida != 1)
+        if (materiaIndex >= 0 && materiaIndex < currentSizeMateries && materias[materiaIndex].escolhida != 1)
         {
-            printf("%s\n", materias[materiaIndex].nome);
-            materias[materiaIndex].escolhida = 1; // Marca como escolhida
-
+            materias[materiaIndex].escolhida = 1;
             choosenMateriesNames[countMateries] = materias[materiaIndex].nome;
         }
 
@@ -26,35 +53,36 @@ void getChoosenMateries(char **choosenMateriesNames, struct Materia *materias, i
     }
 }
 
-int showMateriesNames(int qCursoId, int qPeriodo, int *choosenMateries, int currentSizeMateries, char **choosenMateriesNames)
+void showChosenMateries(struct Materia *materias, int currentSizeMateries)
+{
+    int countMateries = 0;
+
+    while (countMateries < currentSizeMateries)
+    {
+        if (materias[countMateries].escolhida == 1)
+        {
+            printf("%s\n", materias[countMateries].nome);
+        }
+
+        countMateries++;
+    }
+}
+
+int prepareMateries(int qCursoId, int qPeriodo, int *currentSizeMateries, struct Materia **materias)
 {
     FILE *file = fopen("materias.txt", "r");
 
     char line[200];
-
-    int currentSize = 0;
-
-    int materiaId;
-    int idCurso;
+    int materiaId, idCurso, periodo;
     char materia[30];
-    int periodo;
-    int count = 0;
 
     if (file == NULL)
     {
-        cleanConsole();
+        printf("Erro ao abrir o arquivo.\n");
         return 1;
     }
 
-    int position = 0;
-
-    struct Materia *materias = (struct Materia *)malloc(currentSize * sizeof(struct Materia));
-
-    if (materias == NULL)
-    {
-        printf("Erro ao alocar memória.\n");
-        return 1;
-    }
+    int position = *currentSizeMateries;
 
     while (fgets(line, sizeof(line), file))
     {
@@ -62,30 +90,38 @@ int showMateriesNames(int qCursoId, int qPeriodo, int *choosenMateries, int curr
 
         if (idCurso == qCursoId && periodo == qPeriodo)
         {
-            currentSize++;
+            (*currentSizeMateries)++;
 
-            materias = (struct Materia *)realloc(materias, currentSize * sizeof(struct Materia));
+            struct Materia *temp = (struct Materia *)realloc(*materias, (*currentSizeMateries) * sizeof(struct Materia));
 
-            materias[position].id = materiaId;
-            materias[position].cursoId = qCursoId;
-            strcpy(materias[position].nome, materia);
-            materias[position].periodo = periodo;
+            if (temp == NULL)
+            {
+                printf("Erro ao realocar memória.\n");
+                fclose(file);
+                return 1;
+            }
+
+            *materias = temp;
+
+            (*materias)[position].id = materiaId;
+            (*materias)[position].cursoId = qCursoId;
+            strcpy((*materias)[position].nome, materia);
+            (*materias)[position].periodo = periodo;
 
             position++;
         }
     }
 
-    printf("========Matérias Escolhidas========\n");
+    fclose(file);
+    return 0;
+}
 
-    getChoosenMateries(choosenMateriesNames, materias, currentSizeMateries, choosenMateries, currentSize);
+int showMateriesNames(int currentSizeMateries, struct Materia *materias)
+{
+    int count = 0;
 
-    printf("===================================\n");
-
-    count = 0;
-
-    while (count < currentSize)
+    while (count < currentSizeMateries)
     {
-
         if (!materias[count].escolhida || materias[count].escolhida != 1)
         {
             printf("%d - %s \n", count + 1, materias[count].nome);
@@ -93,8 +129,4 @@ int showMateriesNames(int qCursoId, int qPeriodo, int *choosenMateries, int curr
 
         count++;
     }
-
-    fclose(file);
-
-    return 0;
 }

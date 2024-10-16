@@ -1,0 +1,8 @@
+
+
+
+IDUSUARIO: 5,Segunda,MATERIAS: {Gestão de Projetos: 00:20,Empreendedorismo: 00:20,Big Data: 00:20,Computação Gráfica: 00:20,},
+IDUSUARIO: 5,Terça,MATERIAS: {Gestão de Projetos: 00:20,Empreendedorismo: 00:20,Big Data: 00:20,Computação Gráfica: 00:20,},
+IDUSUARIO: 5,Quarta,MATERIAS: {Gestão de Projetos: 00:20,Empreendedorismo: 00:20,Big Data: 00:20,Computação Gráfica: 00:20,},
+IDUSUARIO: 5,Quinta,MATERIAS: {Gestão de Projetos: 00:20,Empreendedorismo: 00:20,Big Data: 00:20,Computação Gráfica: 00:20,},
+IDUSUARIO: 5,Sexta,MATERIAS: {Gestão de Projetos: 00:20,Empreendedorismo: 00:20,Big Data: 00:20,Computação Gráfica: 00:20,},

@@ -2,8 +2,8 @@
 #include <stdbool.h>
 #include <string.h>
 
-#include "monitoring.h"
 #include "../_Auth/login.h"
+#include "monitoring.h"
 #include "../_Materies/materies.h"
 #include "../helper.h"
 #include "../main.h"
@@ -22,40 +22,30 @@
 const char* OPERATIONALSYSTEM;
 bool accountCreated = false;
 
-void registerForMonitoring()
+void registerForMonitoring(struct User *loggedUser)
 {
+    OPERATIONALSYSTEM = verifyOperationalSystem();
+    FILE *file;
+    char pathDirectory[30];
+    if(strcmp(OPERATIONALSYSTEM, "Windows") == 0)
+    {
+      strcpy(pathDirectory, "monitoring.txt");
+      file = fopen(pathDirectory, "a");
+    }
+    else
+    {
+      file = fopen("monitoring.txt", "a");
+    }
+
     cleanConsole();
-    
     char materia[150];
     long contato;
     int hora, minuto = 0, opcao, confirmarDados;
     bool repetirAcao = true;
+    struct Materia selectedMatter = handleChoseMatter(loggedUser);
 
-    do
-    {
-        printf("Digite o nome da matéria:  \n1 - Matemática\n2 - Português\n3 - Inglês\n4 - Geografia\nResposta: ");
-        scanf("%d", &opcao);
-
-        switch(opcao)
-        {
-          case 1:
-            printf("Matéria 1");
-            break;
-          case 2:
-            printf("Matéria 2");
-            break;
-          case 3:
-            printf("Matéria 3");
-            break;
-          case 4:
-            printf("Matéria 4");
-            break;
-          default:
-            printf("Inválido!!!");
-        }
-    }while(opcao < 1 || opcao > 4);
-    
-    cleanConsole();
+    rewind(file);
+    fprintf(file, "MATÉRIA: %s, ", selectedMatter.nome);
     
     printf("\nDigite um número para contato:\n(81) ");
     scanf("%ld", &contato);
@@ -97,20 +87,6 @@ void registerForMonitoring()
         cleanConsole();
         if(confirmarDados == 1)
         {
-          OPERATIONALSYSTEM = verifyOperationalSystem();
-          FILE *file;
-          char pathDirectory[30];
-          if(strcmp(OPERATIONALSYSTEM, "Windows") == 0)
-          {
-            strcpy(pathDirectory, "..\\monitoring.txt");
-            file = fopen(pathDirectory, "a+");
-          }
-          else
-          {
-            file = fopen("../monitoring.txt", "a+");
-          }
-
-          rewind(file);
 
           fprintf(file, "CONTATO: %ld,", contato);
           fprintf(file, "HORA DISPONÍVEL: %d:%d", hora, minuto);
@@ -124,7 +100,7 @@ void registerForMonitoring()
     }while(repetirAcao);
 }
 
-void verifyAccountCreated()
+void verifyAccountCreated(struct User *loggedUser)
 {
   int newRegister;
   if(accountCreated == true)
@@ -135,7 +111,7 @@ void verifyAccountCreated()
     if(newRegister == 1)
     {
       accountCreated = !accountCreated;
-      registerForMonitoring();
+      registerForMonitoring(loggedUser);
     }
     else if(newRegister == 2)
     {
@@ -145,6 +121,6 @@ void verifyAccountCreated()
   }
   else
   {
-    registerForMonitoring();
+    registerForMonitoring(loggedUser);
   }
 }

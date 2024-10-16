@@ -11,6 +11,10 @@ struct Materia
     int escolhida;
 };
 
-int showMateriesNames(int qCursoId, int qPeriodo, int *choosenMateries, int currentSizeMateries, char **choosenMateriesNames);
+int prepareMateries(int qCursoId, int qPeriodo, int *currentSizeMateries, struct Materia **materias);
+int showMateriesNames(int currentSizeMateries, struct Materia *materias);
+void prepareChoosenMateries(char **choosenMateriesNames, struct Materia *materias, int currentSizeMateries, int *choosenMateries);
+void showChosenMateries(struct Materia *materias, int currentSizeMateries);
+struct Materia handleChoseMatter(struct User *loggedUser);
 
 #endif
