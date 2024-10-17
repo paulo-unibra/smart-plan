@@ -81,6 +81,10 @@ int main()
             // verifyAccountCreated(&loggedUser);
             registerForMonitoring(&loggedUser);
         }
+        else if(opcao == 6)
+        {
+            queryMonitoring();
+        }
         else
         {
             cleanConsole();

@@ -1,0 +1,6 @@
+
+IDUSUARIO: 5,Segunda,MATERIAS: {Gestão de Projetos: 02:00,Empreendedorismo: 02:00,Big Data: 02:00,IoT: 02:00,Machine Learning: 02:00,},
+IDUSUARIO: 5,Terça,MATERIAS: {Gestão de Projetos: 02:00,Empreendedorismo: 02:00,Big Data: 02:00,IoT: 02:00,Machine Learning: 02:00,},
+IDUSUARIO: 5,Quarta,MATERIAS: {Gestão de Projetos: 02:00,Empreendedorismo: 02:00,Big Data: 02:00,IoT: 02:00,Machine Learning: 02:00,},
+IDUSUARIO: 5,Quinta,MATERIAS: {Gestão de Projetos: 02:00,Empreendedorismo: 02:00,Big Data: 02:00,IoT: 02:00,Machine Learning: 02:00,},
+IDUSUARIO: 5,Sexta,MATERIAS: {Gestão de Projetos: 02:00,Empreendedorismo: 02:00,Big Data: 02:00,IoT: 02:00,Machine Learning: 02:00,},
