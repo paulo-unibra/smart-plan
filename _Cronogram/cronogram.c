@@ -184,6 +184,7 @@ void consultCronogram(struct User *loggedUser)
 
     showHeader("CONSULTAR CRONOGRAMA");
     char line[400];
+    bool hasCronogram = false;
 
     FILE *file = fopen("_Cronogram/cronogramas.txt", "r");
 
@@ -197,6 +198,7 @@ void consultCronogram(struct User *loggedUser)
 
         if (idUsuario == loggedUser->id)
         {
+            hasCronogram = true;
             printf("\033[1m\033[3m\033[34m%s\033[0m\n", diaSemana);
 
             printf("- Matérias - \n");
@@ -204,6 +206,10 @@ void consultCronogram(struct User *loggedUser)
 
             printf("============================\n");
         }
+    }
+
+    if(!hasCronogram){
+        showError("Ainda não tem um cronograma criado");
     }
 
     fclose(file);
