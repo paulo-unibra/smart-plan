@@ -32,13 +32,10 @@ void queryMonitoring()
   file = fopen("monitoring.txt", "r");
   char ch;
   bool repetir = true;
-  char *list; // Aqui já é todo o conteudo do .txt ...
+  char *list = (char *)malloc(1); // Aqui já é todo o conteudo do .txt ...
   char line[1024];  // Armazena uma linha...
   int newSize = 0; // Aqui é o novo tamanho de cada linha para dar um realloc...
-
-    // Aloca um espaço na mémoria...
-    list = (char *)malloc(1);
-    list[0] = '\0';  // Cria uma string vazia...
+  list[0] = '\0';  // Cria uma string vazia...
 
     // Lê linha por linha do .txt e logo em seguida armazena no line...
     while (fgets(line, sizeof(line), file)) {
@@ -58,7 +55,6 @@ void queryMonitoring()
 
         printf("%s", list); // Imprime a lista do .txt ...
 
-        printf("\n");
         printf("\nAperte ESC para sair...\n");
 
         if(strcmp(OPERATIONALSYSTEM, "Windows") == 0)
@@ -152,7 +148,7 @@ void registerForMonitoring(struct User *loggedUser)
           fprintf(file, "IDUSUARIO: %ld,", loggedUser->id);
           fprintf(file, "NOMEUSUARIO: %s,", loggedUser->name);
           fprintf(file, "CONTATO: %s,", contato);
-          fprintf(file, "HORA DISPONÍVEL: %d:%d", hora, minuto);
+          fprintf(file, "HORA DISPONÍVEL: %d:%.2d", hora, minuto);
           fprintf(file, "\n");
           fclose(file);
           accountCreated = !accountCreated;
