@@ -156,7 +156,8 @@ void mountCompletePerformances(struct User *loggedUser)
     struct Materia materia;
     long userId;
 
-    showInfo("\nSEU DESEMPENHO: ");
+    cleanConsole();
+    showHeader("SEU DESEMPENHO: ");
     while (fgets(line, sizeof(line), userQuestionFile))
     {
         sscanf(line, "IDUSUARIO: %ld,MATERIAID: %d,MATERIANOME: %[^,],CORRETAS: %d,ERRADAS: %d,PONTUACAO: %f",
