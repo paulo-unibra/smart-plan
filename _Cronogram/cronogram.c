@@ -96,8 +96,8 @@ int createCronogram(struct User *loggedUser)
 
     while (registerAgain == 1)  
     {
-        // system("clear");
-        printf("===CRIAÇÃO DE CRONOGRAMA===\n\n");
+        cleanConsole();
+        showHeader("CRIAÇÃO DE CRONOGRAMA");
 
         showMateriesNames(currentSizeMateries, materias);
 
@@ -171,7 +171,7 @@ int createCronogram(struct User *loggedUser)
     free(choosenMateries);
     free(materias);
 
-    printf("CRONOGRAMA CRIADO!\n");
+    showInfo("CRONOGRAMA CRIADO!\n");
     printf("====================\n");
 
     return 0;
@@ -182,7 +182,7 @@ void consultCronogram(struct User *loggedUser)
 
     cleanConsole();
 
-    printf("===CONSULTAR CRONOGRAMA===\n");
+    showHeader("CONSULTAR CRONOGRAMA");
     char line[400];
 
     FILE *file = fopen("_Cronogram/cronogramas.txt", "r");

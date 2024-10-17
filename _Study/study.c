@@ -16,9 +16,7 @@
 #ifdef _WIN32
 #include <conio.h>
 #endif
-#include <conio.h>
-
-const char* OPERATIONALSYSTEM;
+// #include <conio.h>
 
 void prepareQuestionByMatter(int selectedMatterId, int *questionsSize, struct Question **matterQuestions)
 {
@@ -238,7 +236,7 @@ int startStudies(struct User *loggedUser)
 
 void startStopwatch()
 {
-    OPERATIONALSYSTEM = verifyOperationalSystem();
+    char* OPERATIONALSYSTEM = verifyOperationalSystem();
     int segundos = 0;
     int minutos = 0;
     int horas = 0;

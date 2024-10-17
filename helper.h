@@ -7,7 +7,7 @@ char *convertNumberToHours(float numberHour);
 int getChar();
 void useSecondsMicroseconds(int time);
 void sleepOS(int time);
-const char* verifyOperationalSystem();
+char* verifyOperationalSystem();
 void cleanConsole();
 
 

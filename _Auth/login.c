@@ -8,10 +8,13 @@
 #include "../helper.h"
 
 void initialMenu(int *option)
-{
-    printf("Digite uma opção para continuar: \n");
+{       
+    cleanConsole();
+    showHeader("SEU SISTEMA DE ESTUDOS");
+
     printf("1 - Login\n");
-    printf("2 - Cadastro\n");
+    printf("2 - Cadastro\n\n");
+    printf("Digite uma opção para continuar: ");
 
     if (scanf("%d", option) != 1)
     {
@@ -59,8 +62,7 @@ void menuLogin(struct User *loggedUser)
 void registerUser(int *logged, struct User *user)
 {
     cleanConsole();
-
-    printf("======CADASTRO=====\n");
+    showHeader("CADASTRO");
 
     while (!isCompositeName(user->name))
     {
@@ -80,6 +82,7 @@ void registerUser(int *logged, struct User *user)
 
         cleanConsole();
         showError("E-mail inválido");
+        sleepOS(1);
     }
 
     while (!isStrongPassword(user->password))
@@ -161,7 +164,8 @@ void login(int *logged, struct User *user)
 {
     char line[200];
 
-    printf("======LOGIN=====\n");
+    cleanConsole();
+    showHeader("LOGIN");
 
     printf("Digite o e-mail do usuário: ");
     scanf(" %s", user->email);
@@ -169,7 +173,6 @@ void login(int *logged, struct User *user)
     printf("Digite sua senha: ");
     scanf(" %s", user->password);
 
-    // TUDO VALIDO - CADASTRAR NO BANCO
     FILE *bdUser = fopen("users.txt", "r");
 
     if (bdUser == NULL)
@@ -184,10 +187,6 @@ void login(int *logged, struct User *user)
         char sName[200], sEmail[200], sPass[200];
 
         sscanf(line, "IDUSUARIO: %ld,CURSOID: %d, PERIODO: %d,%[^,],%[^,],%s", &user->id, &user->cursoId, &user->periodo, sName, sEmail, sPass);
-
-        // printf("%s\n", line);
-        // printf("%s\n", sEmail);
-        // printf("%s\n", user->email);
 
         if (strcmp(sEmail, user->email) == 0 && strcmp(sPass, user->password) == 0)
         {

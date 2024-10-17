@@ -85,7 +85,8 @@ int main()
         }
         else if(opcao == 5)
         {
-            verifyAccountCreated(&loggedUser);
+            // verifyAccountCreated(&loggedUser);
+            registerForMonitoring(&loggedUser);
         }
         else
         {

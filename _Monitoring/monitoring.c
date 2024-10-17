@@ -19,11 +19,11 @@
  * porém, cada matéria cadastrada precisa 
  * informar se tem monitor ou não)
  */
-const char* OPERATIONALSYSTEM;
+char* OPERATIONALSYSTEM;
 bool accountCreated = false;
 
 void registerForMonitoring(struct User *loggedUser)
-{
+{     
     OPERATIONALSYSTEM = verifyOperationalSystem();
     FILE *file;
     char pathDirectory[30];
@@ -38,8 +38,11 @@ void registerForMonitoring(struct User *loggedUser)
     }
 
     cleanConsole();
+
+    showHeader("CADASTRO NA MONITORIA");
+
     char materia[150];
-    long contato;
+    char contato[100];
     int hora, minuto = 0, opcao, confirmarDados;
     bool repetirAcao = true;
     struct Materia selectedMatter = handleChoseMatter(loggedUser);
@@ -48,7 +51,7 @@ void registerForMonitoring(struct User *loggedUser)
     fprintf(file, "MATÉRIA: %s, ", selectedMatter.nome);
     
     printf("\nDigite um número para contato:\n(81) ");
-    scanf("%ld", &contato);
+    scanf("%s", contato);
     
     do
     {
@@ -88,7 +91,9 @@ void registerForMonitoring(struct User *loggedUser)
         if(confirmarDados == 1)
         {
 
-          fprintf(file, "CONTATO: %ld,", contato);
+          fprintf(file, "IDUSUARIO: %ld,", loggedUser->id);
+          fprintf(file, "NOMEUSUARIO: %s,", loggedUser->name);
+          fprintf(file, "CONTATO: %s,", contato);
           fprintf(file, "HORA DISPONÍVEL: %d:%d", hora, minuto);
           fprintf(file, "\n");
           fclose(file);

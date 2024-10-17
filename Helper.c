@@ -57,7 +57,7 @@ void sleepOS(int time)
 }
 
 // Função que verifica o Sistema Operacional...
-const char *verifyOperationalSystem()
+char *verifyOperationalSystem()
 {
 #ifdef _WIN32
     return "Windows";

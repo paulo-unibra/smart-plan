@@ -4,3 +4,5 @@ IDUSUARIO: 3,CURSOID: 1,PERIODO: 4,Thaynan mendoenca,thay@gmail.com,Zz!8618190
 IDUSUARIO: 4,CURSOID: 2,PERIODO: 3, g���,teste-gmail@gmail.com,Zz!8618190
 IDUSUARIO: 5,CURSOID: 1,PERIODO: 4,Paulo Novo,paulo@gmail.com,Zz!8618190
 IDUSUARIO: 6,CURSOID: 2,PERIODO: 4,Wesley Cauan,wesley@gmail.com,Zz!8618190
+IDUSUARIO: 7,CURSOID: 1,PERIODO: 1,Mavi de Teste,mavi@gmail.com,Zz!8618190
+IDUSUARIO: 8,CURSOID: 2,PERIODO: 1,Paulo Ricardo,paulo@gmail.com,Zz!8618190
