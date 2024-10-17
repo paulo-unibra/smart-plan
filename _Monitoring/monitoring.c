@@ -51,8 +51,8 @@ void queryMonitoring()
 
     while (repetir)
     {
-      sleepOS(1);
         cleanConsole();
+        sleepOS(1);
         
         showHeader("CONSULTAR MONITORIA");
 
