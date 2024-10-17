@@ -20,23 +20,15 @@
 
 
 void menuLogado()
-{
+{   
+    showHeader("ÁREA LOGADA");
+
     printf("1 - Consultar Cronograma\n");
     printf("2 - Criar Cronograma\n");
     printf("3 - Iniciar Estudos\n");
-    // Perguntar a matéria de estudos
-    // Definir tipo de estudos (Questionario|Estudo Livre)
-
     printf("4 - Verificar Desempenho\n");
-
     printf("5 - Cadastrar-se na Monitoria\n");
-    // Qual matéria
-    // Horário disponível
-    // Meio de Contato
-
     printf("6 - Consultar Monitores\n\n");
-    // Perguntar a matéria
-    // Lista todos os monitores nas materias que eu estou matriculado
 }
 
 int areadyCreated(int arr[], int size, int number)

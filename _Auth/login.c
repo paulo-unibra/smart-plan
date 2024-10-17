@@ -8,7 +8,7 @@
 #include "../helper.h"
 
 void initialMenu(int *option)
-{       
+{
     cleanConsole();
     showHeader("SEU SISTEMA DE ESTUDOS");
 
@@ -28,11 +28,11 @@ void menuLogin(struct User *loggedUser)
     int option = 3;
     int logged = 0;
 
-    // struct User user;
-
     while (logged == 0)
     {
+        cleanConsole();
         initialMenu(&option);
+        cleanConsole();
 
         if (isValidOptionLogin(&option))
         {
@@ -82,7 +82,6 @@ void registerUser(int *logged, struct User *user)
 
         cleanConsole();
         showError("E-mail inválido");
-        sleepOS(1);
     }
 
     while (!isStrongPassword(user->password))
@@ -164,7 +163,6 @@ void login(int *logged, struct User *user)
 {
     char line[200];
 
-    cleanConsole();
     showHeader("LOGIN");
 
     printf("Digite o e-mail do usuário: ");
@@ -195,15 +193,17 @@ void login(int *logged, struct User *user)
         }
     }
 
+    cleanConsole();
+
     if (*logged == 1)
     {
         printf("\033[32mUsuário Logado com Sucesso!\033[0m\n");
     }
     else
     {
-        cleanConsole();
         printf("\033[31mE-MAIL E/OU SENHA INCORRETO(s)\033[0m\n");
     }
 
+    sleepOS(1);
     fclose(bdUser);
 }
