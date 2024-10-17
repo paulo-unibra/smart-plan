@@ -171,7 +171,7 @@ int createCronogram(struct User *loggedUser)
     free(choosenMateries);
     free(materias);
 
-    showInfo("CRONOGRAMA CRIADO!\n");
+    showInfo("CRONOGRAMA CRIADO!");
     printf("====================\n");
 
     return 0;

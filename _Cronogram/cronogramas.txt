@@ -1,9 +1,0 @@
-
-
-
-
-IDUSUARIO: 7,Segunda,MATERIAS: {Lógica de Programação: 00:20,Algoritmos: 00:20,Fundamentos de TI: 00:20,},
-IDUSUARIO: 7,Terça,MATERIAS: {Lógica de Programação: 00:20,Algoritmos: 00:20,Fundamentos de TI: 00:20,},
-IDUSUARIO: 7,Quarta,MATERIAS: {Lógica de Programação: 00:20,Algoritmos: 00:20,Fundamentos de TI: 00:20,},
-IDUSUARIO: 7,Quinta,MATERIAS: {Lógica de Programação: 00:20,Algoritmos: 00:20,Fundamentos de TI: 00:20,},
-IDUSUARIO: 7,Sexta,MATERIAS: {Lógica de Programação: 00:20,Algoritmos: 00:20,Fundamentos de TI: 00:20,},

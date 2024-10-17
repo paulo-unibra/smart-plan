@@ -13,10 +13,10 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+
 #ifdef _WIN32
 #include <conio.h>
 #endif
-// #include <conio.h>
 
 void prepareQuestionByMatter(int selectedMatterId, int *questionsSize, struct Question **matterQuestions)
 {
@@ -170,7 +170,6 @@ void mountCompletePerformances(struct User *loggedUser)
 
     fclose(userQuestionFile);
 }
-
 int startStudies(struct User *loggedUser)
 {
 

@@ -9,6 +9,9 @@ void useSecondsMicroseconds(int time);
 void sleepOS(int time);
 char* verifyOperationalSystem();
 void cleanConsole();
+void showHeader(char *str);
+int showSucces(char *message);
+int showDanger(char *errorMessage);
 
 
 void set_nonblocking_mode(int enable);

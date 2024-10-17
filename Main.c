@@ -12,6 +12,7 @@
 #include "./_Auth/login.h"
 #include "./_Cronogram/cronogram.h"
 #include "./_Materies/materies.h"
+#include "./_Study/study.h"
 
 #include "./_Monitoring/monitoring.h"
 
