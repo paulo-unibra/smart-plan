@@ -201,7 +201,7 @@ void login(int *logged, struct User *user)
     }
     else
     {
-        printf("\033[31mE-MAIL E/OU SENHA INCORRETO(s)\033[0m\n");
+        showError("E-MAIL E/OU SENHA INCORRETO(s)");
     }
 
     sleepOS(1);

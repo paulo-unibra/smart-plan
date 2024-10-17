@@ -1,13 +1,16 @@
 #include <stdio.h>
 #include <stdbool.h>
 #include <string.h>
+#include <stdlib.h>
+
+#ifdef _WIN32
+#include <conio.h>
+#endif
 
 #include "../_Auth/login.h"
 #include "monitoring.h"
 #include "../_Materies/materies.h"
 #include "../helper.h"
-#include "../main.h"
-
 /**
  * Monitoria*
  * cadastrar na monitoria
@@ -21,21 +24,72 @@
  */
 char* OPERATIONALSYSTEM;
 bool accountCreated = false;
+FILE *file;
+
+void queryMonitoring()
+{
+  OPERATIONALSYSTEM = verifyOperationalSystem();
+  file = fopen("monitoring.txt", "r");
+  char ch;
+  bool repetir = true;
+  char *list = (char *)malloc(1); // Aqui já é todo o conteudo do .txt ...
+  char line[1024];  // Armazena uma linha...
+  int newSize = 0; // Aqui é o novo tamanho de cada linha para dar um realloc...
+  list[0] = '\0';  // Cria uma string vazia...
+
+    // Lê linha por linha do .txt e logo em seguida armazena no line...
+    while (fgets(line, sizeof(line), file)) {
+        newSize += strlen(line); // Equivalente ao .length em outras linguagens...
+        list = (char *)realloc(list, newSize + 1);  // Realoca o espaço na mémoria para armazenar a nova linha, já que cada linha pode variar de tamanho...
+        strcat(list, line);  // Concatena a nova linha com a string vázia criando uma réplica do .txt até o final...
+    }
+
+  set_nonblocking_mode(1);
+
+    while (repetir)
+    {
+      sleepOS(1);
+        cleanConsole();
+        
+        showHeader("CONSULTAR MONITORIA");
+
+        printf("%s", list); // Imprime a lista do .txt ...
+
+        printf("\nAperte ESC para sair...\n");
+
+        if(strcmp(OPERATIONALSYSTEM, "Windows") == 0)
+        {
+            if(kbhit()) {
+                ch = getChar();
+                if (ch == 27)
+                { 
+                    repetir = false;
+                    break;
+                }
+            }
+        } 
+        else 
+        {
+            ch = getChar();
+            if (ch == 27)
+            { 
+                repetir = false;
+                break;
+            }
+        }
+    }
+
+    free(list);
+    fclose(file);
+    set_nonblocking_mode(0);
+
+    cleanConsole();
+}
 
 void registerForMonitoring(struct User *loggedUser)
 {     
-    OPERATIONALSYSTEM = verifyOperationalSystem();
-    FILE *file;
-    char pathDirectory[30];
-    if(strcmp(OPERATIONALSYSTEM, "Windows") == 0)
-    {
-      strcpy(pathDirectory, "monitoring.txt");
-      file = fopen(pathDirectory, "a");
-    }
-    else
-    {
-      file = fopen("monitoring.txt", "a");
-    }
+    
+    file = fopen("monitoring.txt", "a");
 
     cleanConsole();
 
@@ -94,7 +148,7 @@ void registerForMonitoring(struct User *loggedUser)
           fprintf(file, "IDUSUARIO: %ld,", loggedUser->id);
           fprintf(file, "NOMEUSUARIO: %s,", loggedUser->name);
           fprintf(file, "CONTATO: %s,", contato);
-          fprintf(file, "HORA DISPONÍVEL: %d:%d", hora, minuto);
+          fprintf(file, "HORA DISPONÍVEL: %d:%.2d", hora, minuto);
           fprintf(file, "\n");
           fclose(file);
           accountCreated = !accountCreated;
