@@ -8,3 +8,4 @@ IDUSUARIO: 7,CURSOID: 1,PERIODO: 1,Mavi de Teste,mavi@gmail.com,Zz!8618190
 IDUSUARIO: 8,CURSOID: 2,PERIODO: 1,Paulo Ricardo,paulo@gmail.com,Zz!8618190
 
 IDUSUARIO: 9,CURSOID: 1,PERIODO: 2,Pedroza Roberto,pedroza@gmail.com,Zz!8618190
+IDUSUARIO: 11,CURSOID: 1,PERIODO: 1,Roberto Nascimento,roberto@gmail.com,Zz!8618190
