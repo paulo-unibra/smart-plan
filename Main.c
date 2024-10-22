@@ -1,6 +1,8 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
+#include <locale.h>
+
 
 #ifdef _WIN32
 #include <conio.h>
@@ -46,6 +48,8 @@ int areadyCreated(int arr[], int size, int number)
 
 int main()
 {
+    setlocale(LC_ALL, "pt_BR.UTF-8");
+    
     const char* OperationalSystem = verifyOperationalSystem();
     struct User loggedUser;
 

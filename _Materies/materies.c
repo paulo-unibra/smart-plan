@@ -40,7 +40,7 @@ void prepareChoosenMateries(char **choosenMateriesNames, struct Materia *materia
     int countMateries = 0;
 
     while (countMateries < currentSizeMateries)
-    {
+    {   
         int materiaIndex = choosenMateries[countMateries] - 1; // Ajustar para índice baseado em 0
 
         if (materiaIndex >= 0 && materiaIndex < currentSizeMateries && materias[materiaIndex].escolhida != 1)

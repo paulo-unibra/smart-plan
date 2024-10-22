@@ -9,3 +9,5 @@ IDUSUARIO: 8,CURSOID: 2,PERIODO: 1,Paulo Ricardo,paulo@gmail.com,Zz!8618190
 
 IDUSUARIO: 9,CURSOID: 1,PERIODO: 2,Pedroza Roberto,pedroza@gmail.com,Zz!8618190
 IDUSUARIO: 11,CURSOID: 1,PERIODO: 1,Roberto Nascimento,roberto@gmail.com,Zz!8618190
+IDUSUARIO: 12,CURSOID: 1,PERIODO: 1,André Honrato,andre@gmail.com,Zz!8618190
+IDUSUARIO: 13,CURSOID: 2,PERIODO: 2,Paulo Ricardo,caio-azevedo@gmail.com,Zz!8618190

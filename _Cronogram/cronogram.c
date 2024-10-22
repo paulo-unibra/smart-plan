@@ -28,11 +28,10 @@ int removeCurrentCronogram(struct User *loggedUser)
     while (fgets(line, sizeof(line), file))
     {
         int idUsuario;
-        char materias[200] = "";
+        char matters[200] = "";
         char diaSemana[20] = "";
 
-        sscanf(line, "IDUSUARIO: %d,%[^,],MATERIAS: {%[^\n}] ,", &idUsuario, diaSemana, materias);
-
+        sscanf(line, "IDUSUARIO: %d,%[^,],matters: {%[^\n}] ,", &idUsuario, diaSemana, matters);
 
         if (idUsuario != loggedUser->id)
         {
@@ -47,6 +46,16 @@ int removeCurrentCronogram(struct User *loggedUser)
 
     remove(filename);
     rename("_Cronogram/temp.txt", filename);
+}
+
+void handleBlockChosedMatters(char **choosenMateriesNames, struct Materia *matters, int currentSizeMateries, int *choosenMateries)
+{
+    printf("========Matérias Escolhidas========\n");
+
+    prepareChoosenMateries(choosenMateriesNames, matters, currentSizeMateries, choosenMateries);
+    showChosenMateries(matters, currentSizeMateries);
+
+    printf("===================================\n");
 }
 
 int createCronogram(struct User *loggedUser)
@@ -76,17 +85,18 @@ int createCronogram(struct User *loggedUser)
         removeCurrentCronogram(loggedUser);
     }
 
-    struct Materia *materias = NULL;
-    prepareMateries(loggedUser->cursoId, loggedUser->periodo, &currentSizeMateries, &materias);
+    struct Materia *matters = NULL;
+    prepareMateries(loggedUser->cursoId, loggedUser->periodo, &currentSizeMateries, &matters);
 
-    choosenMateries = (int *)malloc(currentSizeMateries * sizeof(int));
+    choosenMateries = (int *)calloc(currentSizeMateries, sizeof(int));
+    char **choosenMateriesNames = (char **)calloc(currentSizeMateries, sizeof(char *));
+
     if (choosenMateries == NULL)
     {
         printf("Erro ao alocar memória!\n");
         return 1;
     }
 
-    char **choosenMateriesNames = (char **)malloc(currentSizeMateries * sizeof(char *));
     if (choosenMateriesNames == NULL)
     {
         printf("Erro ao alocar memória!\n");
@@ -94,27 +104,22 @@ int createCronogram(struct User *loggedUser)
         return 1;
     }
 
-    while (registerAgain == 1)  
+    while (registerAgain == 1)
     {
         cleanConsole();
         showHeader("CRIAÇÃO DE CRONOGRAMA");
 
-        showMateriesNames(currentSizeMateries, materias);
+        showMateriesNames(currentSizeMateries, matters);
 
-        printf("========Matérias Escolhidas========\n");
-
-        prepareChoosenMateries(choosenMateriesNames, materias, currentSizeMateries, choosenMateries);
-        showChosenMateries(materias, currentSizeMateries);
-        
-        printf("===================================\n");
+        handleBlockChosedMatters(choosenMateriesNames, matters, currentSizeMateries, choosenMateries);
 
         printf("Escolha um número de (1 - %d) para matéria: ", currentSizeMateries);
         scanf("%d", &choosenMateries[count]);
 
-        int chosenIndex = choosenMateries[count] - 1;  // Corrige o índice (se a escolha é de 1 a currentSizeMateries)
+        int chosenIndex = choosenMateries[count] - 1; // Corrige o índice (se a escolha é de 1 a currentSizeMateries)
         if (chosenIndex >= 0 && chosenIndex < currentSizeMateries)
         {
-            choosenMateriesNames[count] = strdup(materias[chosenIndex].nome);
+            choosenMateriesNames[count] = strdup(matters[chosenIndex].nome);
         }
         else
         {
@@ -123,10 +128,13 @@ int createCronogram(struct User *loggedUser)
         }
 
         system("clear");
+
+        handleBlockChosedMatters(choosenMateriesNames, matters, currentSizeMateries, choosenMateries);
+
         printf("Cadastrado com sucesso!\n");
         printf("Deseja cadastrar outra (1 - Sim | 2 - Não)? ");
         scanf("%d", &registerAgain);
-        
+
         count++;
     }
 
@@ -152,7 +160,7 @@ int createCronogram(struct User *loggedUser)
         fprintf(file, "\nIDUSUARIO: %ld,", loggedUser->id);
         fprintf(file, "%s,", diasSemana[i]);
 
-        fprintf(file, "MATERIAS: {");
+        fprintf(file, "matters: {");
         for (int j = 0; j < count; j++)
         {
             fprintf(file, "%s: %s,", choosenMateriesNames[j], convertNumberToHours(horasMateria));
@@ -166,10 +174,11 @@ int createCronogram(struct User *loggedUser)
     // for (int j = 0; j < count; j++)
     // {
     //     free(choosenMateriesNames[j]);
-    // }ajustar
+    // }
+    
     free(choosenMateriesNames);
     free(choosenMateries);
-    free(materias);
+    free(matters);
 
     showInfo("CRONOGRAMA CRIADO!");
     printf("====================\n");
@@ -191,10 +200,10 @@ void consultCronogram(struct User *loggedUser)
     while (fgets(line, sizeof(line), file))
     {
         int idUsuario; // Mudar para int para capturar o IDUSUARIO
-        char materias[200] = "";
+        char matters[200] = "";
         char diaSemana[20] = "";
 
-        sscanf(line, "IDUSUARIO: %d,%[^,],MATERIAS: {%[^\n}] ,", &idUsuario, diaSemana, materias);
+        sscanf(line, "IDUSUARIO: %d,%[^,],matters: {%[^\n}] ,", &idUsuario, diaSemana, matters);
 
         if (idUsuario == loggedUser->id)
         {
@@ -202,13 +211,14 @@ void consultCronogram(struct User *loggedUser)
             printf("\033[1m\033[3m\033[34m%s\033[0m\n", diaSemana);
 
             printf("- Matérias - \n");
-            printf("%s", replaceCommaWithNewline(materias));
+            printf("%s", replaceCommaWithNewline(matters));
 
             printf("============================\n");
         }
     }
 
-    if(!hasCronogram){
+    if (!hasCronogram)
+    {
         showError("Ainda não tem um cronograma criado");
     }
 
@@ -226,10 +236,10 @@ int hasAlreadyCreatedCronogram(struct User *loggedUser)
     while (fgets(line, sizeof(line), file))
     {
         int idUsuario;
-        char materias[200] = "";
+        char matters[200] = "";
         char diaSemana[20] = "";
 
-        sscanf(line, "IDUSUARIO: %d,%[^,],MATERIAS: {%[^\n}] ,", &idUsuario, diaSemana, materias);
+        sscanf(line, "IDUSUARIO: %d,%[^,],matters: {%[^\n}] ,", &idUsuario, diaSemana, matters);
 
         if (idUsuario == loggedUser->id)
         {
