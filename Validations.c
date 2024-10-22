@@ -4,6 +4,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+#include "helper.h"
 #include "errors.h"
 
 int isCompositeName(char name[])
@@ -59,7 +60,7 @@ int isValidEmail(char email[])
 
 int isStrongPassword(char password[])
 {
-    system("clear");
+    cleanConsole();
 
     int length = 0, hasUpper = 0, hasLower = 0, hasDigit = 0, hasSpecial = 0;
 

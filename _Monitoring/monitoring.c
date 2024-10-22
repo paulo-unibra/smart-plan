@@ -32,7 +32,6 @@ void queryMonitoring()
   file = fopen("monitoring.txt", "r");
 
   char ch;
-  bool repetir = true;
   char line[1024]; 
 
   char matter[100];
@@ -113,17 +112,17 @@ void registerForMonitoring(struct User *loggedUser)
 
   showHeader("CADASTRO NA MONITORIA");
 
-  char materia[150];
-  char contato[100];
-  int hora, minuto = 0, opcao, confirmarDados;
-  bool repetirAcao = true;
+  char matter[150];
+  char contact[100];
+  int hour, minutes = 0, option, dateConfirm;
+  bool actionRepeat = true;
   struct Materia selectedMatter = handleChoseMatter(loggedUser);
 
   rewind(file);
   fprintf(file, "MATÉRIA: %s, ", selectedMatter.nome);
 
   printf("\nDigite um número para contato:\n(81) ");
-  scanf("%s", contato);
+  scanf("%s", contact);
 
   do
   {
@@ -133,47 +132,47 @@ void registerForMonitoring(struct User *loggedUser)
     do
     {
       printf("Digite um horário disponível para você:HH:__\n");
-      scanf("%d", &hora);
-      printf(":");
-      if (hora > 23 || hora < 0)
+      scanf("%d", &hour);
+
+      if (hour > 23 || hour < 0)
       {
         cleanConsole();
         printf("Por favor Digite um horário válido!!!\n");
       }
-    } while (hora < 0 || hora > 23);
+    } while (hour < 0 || hour > 23);
     // blocking_mode();
     cleanConsole();
 
     do
     {
-      printf("Digite um horário disponível para você%d:MM:\n%d:", hora, hora);
-      scanf("%d", &minuto);
-      if (minuto < 0 || minuto > 59)
+      printf("Digite um horário disponível para você%d:MM:\n%d:", hour, hour);
+      scanf("%d", &minutes);
+      if (minutes < 0 || minutes > 59)
       {
         cleanConsole();
         printf("Por favor Digite um horário válido!!!\n");
       }
-    } while (minuto < 0 || minuto > 59);
+    } while (minutes < 0 || minutes > 59);
 
     cleanConsole();
-    printf("Horário disponível %.2d:%.2d está certo? \n1 - Sim\n2 - Não\n", hora, minuto);
-    scanf("%d", &confirmarDados);
+    printf("Horário disponível %.2d:%.2d está certo? \n1 - Sim\n2 - Não\n", hour, minutes);
+    scanf("%d", &dateConfirm);
     cleanConsole();
-    if (confirmarDados == 1)
+    if (dateConfirm == 1)
     {
 
       fprintf(file, "IDUSUARIO: %ld,", loggedUser->id);
       fprintf(file, "NOMEUSUARIO: %s,", loggedUser->name);
-      fprintf(file, "CONTATO: %s,", contato);
-      fprintf(file, "HORA DISPONÍVEL: %d:%.2d", hora, minuto);
+      fprintf(file, "CONTATO: %s,", contact);
+      fprintf(file, "HORA DISPONÍVEL: %d:%.2d", hour, minutes);
       fprintf(file, "\n");
       fclose(file);
       accountCreated = !accountCreated;
-      repetirAcao = false;
+      actionRepeat = false;
       break;
     }
 
-  } while (repetirAcao);
+  } while (actionRepeat);
 }
 
 void verifyAccountCreated(struct User *loggedUser)
