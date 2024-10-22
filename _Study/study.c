@@ -21,7 +21,9 @@
 void prepareQuestionByMatter(int selectedMatterId, int *questionsSize, struct Question **matterQuestions)
 {
     FILE *questionFile = fopen("./_Study/questions.txt", "r");
+
     char line[500];
+
 
     if (questionFile == NULL)
     {
