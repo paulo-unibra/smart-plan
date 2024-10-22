@@ -207,7 +207,7 @@ char *replaceCommaWithNewline(char *str)
 
 void showHeader(char *str)
 {
-    printf("\033[3;1;36m=== %s ===\033[0m\n\n", str);
+    printf("\033[3;1;36m==== %s ====\033[0m\n\n", str);
 }
 
 

@@ -50,12 +50,12 @@ int removeCurrentCronogram(struct User *loggedUser)
 
 void handleBlockChosedMatters(char **choosenMateriesNames, struct Materia *matters, int currentSizeMateries, int *choosenMateries)
 {
-    printf("========Matérias Escolhidas========\n");
+    showInfo("========Matérias Escolhidas========");
 
     prepareChoosenMateries(choosenMateriesNames, matters, currentSizeMateries, choosenMateries);
     showChosenMateries(matters, currentSizeMateries);
 
-    printf("===================================\n");
+    showInfo("===================================");
 }
 
 int createCronogram(struct User *loggedUser)
@@ -64,9 +64,11 @@ int createCronogram(struct User *loggedUser)
     float horas;
     int registerAgain = 1;
     int *choosenMateries = NULL;
+    int *oldChoosenMateries = NULL;
     int currentSizeMateries = 0;
     int currentSizeToChoseMateries = 0;
     int deleteCurrentCronogram = 0;
+    int realSizeMaterr = 0;
 
     cleanConsole();
 
@@ -89,6 +91,7 @@ int createCronogram(struct User *loggedUser)
     prepareMateries(loggedUser->cursoId, loggedUser->periodo, &currentSizeMateries, &matters);
 
     choosenMateries = (int *)calloc(currentSizeMateries, sizeof(int));
+    oldChoosenMateries = (int *)calloc(currentSizeMateries, sizeof(int));
     char **choosenMateriesNames = (char **)calloc(currentSizeMateries, sizeof(char *));
 
     if (choosenMateries == NULL)
@@ -113,29 +116,44 @@ int createCronogram(struct User *loggedUser)
 
         handleBlockChosedMatters(choosenMateriesNames, matters, currentSizeMateries, choosenMateries);
 
+        for (int i = 0; i < count; i++)
+        {
+           oldChoosenMateries[i] = choosenMateries[i];
+        }
+         
         printf("Escolha um número de (1 - %d) para matéria: ", currentSizeMateries);
         scanf("%d", &choosenMateries[count]);
 
-        int chosenIndex = choosenMateries[count] - 1; // Corrige o índice (se a escolha é de 1 a currentSizeMateries)
-        if (chosenIndex >= 0 && chosenIndex < currentSizeMateries)
-        {
-            choosenMateriesNames[count] = strdup(matters[chosenIndex].nome);
+        int chosenIndex = choosenMateries[count] - 1;
+
+        if (chosenIndex >= 0 && 
+            chosenIndex < currentSizeMateries && 
+            count < currentSizeMateries && 
+            !isAlreadyChosedMatter(oldChoosenMateries, currentSizeMateries, choosenMateries[count])
+        ){
+            count++;
         }
         else
         {
-            printf("Escolha inválida!\n");
+            showError("Opção inválida!");
+            sleepOS(1);
             continue;
         }
 
-        system("clear");
+        cleanConsole();
 
         handleBlockChosedMatters(choosenMateriesNames, matters, currentSizeMateries, choosenMateries);
 
-        printf("Cadastrado com sucesso!\n");
-        printf("Deseja cadastrar outra (1 - Sim | 2 - Não)? ");
-        scanf("%d", &registerAgain);
+        if (count == currentSizeMateries)
+        {
+            registerAgain = 2;
+            continue;
+        }
 
-        count++;
+        showSucces("Cadastrado com sucesso!\n");
+        printf("Deseja cadastrar outra (1 - Sim | 2 - Não)? ");
+
+        scanf("%d", &registerAgain);
     }
 
     printf("Horas disponíveis: ");
@@ -151,7 +169,7 @@ int createCronogram(struct User *loggedUser)
         return 1;
     }
 
-    float horasMateria = horas / currentSizeMateries;
+    float horasMateria = horas / count;
 
     printf("CRIANDO...!\n");
 
@@ -175,7 +193,7 @@ int createCronogram(struct User *loggedUser)
     // {
     //     free(choosenMateriesNames[j]);
     // }
-    
+
     free(choosenMateriesNames);
     free(choosenMateries);
     free(matters);

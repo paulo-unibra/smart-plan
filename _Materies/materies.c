@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <stdbool.h>
 
 #include "../helper.h"
 
@@ -40,7 +41,7 @@ void prepareChoosenMateries(char **choosenMateriesNames, struct Materia *materia
     int countMateries = 0;
 
     while (countMateries < currentSizeMateries)
-    {   
+    {
         int materiaIndex = choosenMateries[countMateries] - 1; // Ajustar para índice baseado em 0
 
         if (materiaIndex >= 0 && materiaIndex < currentSizeMateries && materias[materiaIndex].escolhida != 1)
@@ -129,4 +130,22 @@ int showMateriesNames(int currentSizeMateries, struct Materia *materias)
 
         count++;
     }
+}
+
+bool isAlreadyChosedMatter(int *choosenMateries, int currentSizeMateries, int currentChose)
+{
+    int count = 0;
+    bool isAlreadyChosed = false;
+
+    while (count < currentSizeMateries)
+    {   
+        if (currentChose == choosenMateries[count])
+        {
+            isAlreadyChosed = true;
+        }
+
+        count++;
+    }
+
+    return isAlreadyChosed;
 }

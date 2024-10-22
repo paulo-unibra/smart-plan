@@ -32,3 +32,21 @@ IDUSUARIO: 7,Sexta,MATERIAS: {Lógica de Programação: 00:10,Algoritmos: 00:10,
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+IDUSUARIO: 5,Segunda,matters: {Gestão de Projetos: 00:20,Empreendedorismo: 00:20,Big Data: 00:20,Computação Gráfica: 00:20,Machine Learning: 00:20,IoT: 00:20,},
+IDUSUARIO: 5,Terça,matters: {Gestão de Projetos: 00:20,Empreendedorismo: 00:20,Big Data: 00:20,Computação Gráfica: 00:20,Machine Learning: 00:20,IoT: 00:20,},
+IDUSUARIO: 5,Quarta,matters: {Gestão de Projetos: 00:20,Empreendedorismo: 00:20,Big Data: 00:20,Computação Gráfica: 00:20,Machine Learning: 00:20,IoT: 00:20,},
+IDUSUARIO: 5,Quinta,matters: {Gestão de Projetos: 00:20,Empreendedorismo: 00:20,Big Data: 00:20,Computação Gráfica: 00:20,Machine Learning: 00:20,IoT: 00:20,},
+IDUSUARIO: 5,Sexta,matters: {Gestão de Projetos: 00:20,Empreendedorismo: 00:20,Big Data: 00:20,Computação Gráfica: 00:20,Machine Learning: 00:20,IoT: 00:20,},
