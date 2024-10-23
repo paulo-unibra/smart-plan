@@ -124,9 +124,12 @@ bool kbhit() {
 #else
 
 #ifdef _WIN32
-void characterCorrectorForWindows() {
-    system("chcp 65001");
-    cleanConsole();
+void characterCorrectorForWindows(char* operationalSystem) {
+    if(strcmp(operationalSystem, "Windows") == 0)
+    {
+        system("chcp 65001");
+        cleanConsole();
+    }
 }
 void set_nonblocking_mode(int enable) {
     // Código para Windows
@@ -150,6 +153,22 @@ void set_nonblocking_mode(int enable) {
 
     // Definir o novo modo do console
     SetConsoleMode(hStdin, mode);
+}
+
+char pressEsc(char* operationalSystem) {
+
+    char ch;
+
+        if(strcmp(operationalSystem, "Windows") == 0) {
+            if(kbhit()) {
+                ch = getChar();
+            }
+        }
+        else {
+            ch = getChar();
+        }
+
+    return ch;
 }
 #endif
 

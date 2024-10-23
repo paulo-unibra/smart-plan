@@ -20,6 +20,7 @@
 
 #include "./_Study/study.h"
 
+char* operationalSystem;
 
 void menuLogado()
 {   
@@ -48,10 +49,10 @@ int areadyCreated(int arr[], int size, int number)
 
 int main()
 {
-    char* OperationalSystem = verifyOperationalSystem();
-    if(strcmp(OperationalSystem, "Windows") == 0) {
-        characterCorrectorForWindows();
-    }
+    operationalSystem = verifyOperationalSystem();
+
+    characterCorrectorForWindows(operationalSystem);
+    
     setlocale(LC_ALL, "pt_BR.UTF-8");
 
     struct User loggedUser;

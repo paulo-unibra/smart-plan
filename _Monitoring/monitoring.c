@@ -63,9 +63,7 @@ void queryMonitoring()
   //     list = (char *)realloc(list, newSize + 1);  // Realoca o espaço na mémoria para armazenar a nova linha, já que cada linha pode variar de tamanho...
   //     strcat(list, line);  // Concatena a nova linha com a string vázia criando uma réplica do .txt até o final...
   // }
-
-  set_nonblocking_mode(1);
-
+  
   // while (repetir)
   // {
   //   sleepOS(1);
@@ -99,7 +97,6 @@ void queryMonitoring()
 
   // free(list);
   fclose(file);
-  set_nonblocking_mode(0);
 
 }
 

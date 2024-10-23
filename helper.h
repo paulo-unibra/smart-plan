@@ -13,8 +13,9 @@ void showHeader(char *str);
 int showSucces(char *message);
 int showDanger(char *errorMessage);
 
-
+void characterCorrectorForWindows(char* operationalSystem);
 void set_nonblocking_mode(int enable);
+char pressEsc(char* operationalSystem);
 #ifdef __linux__
 bool kbhit();
 #endif
