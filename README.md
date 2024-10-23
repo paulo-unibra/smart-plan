@@ -2,4 +2,6 @@ gcc Main.c Helper.c Errors.c Validations.c ./_Auth/login.c ./_Cronogram/cronogra
 
 .\output\main
 
+chcp 65001
+
 ./output/main
