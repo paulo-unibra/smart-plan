@@ -123,8 +123,12 @@ bool kbhit() {
 
 #else
 
-void set_nonblocking_mode(int enable) {
 #ifdef _WIN32
+void characterCorrectorForWindows() {
+    system("chcp 65001");
+    cleanConsole();
+}
+void set_nonblocking_mode(int enable) {
     // Código para Windows
     HANDLE hStdin = GetStdHandle(STD_INPUT_HANDLE); // Obter o handle do console
     DWORD mode;
@@ -146,8 +150,8 @@ void set_nonblocking_mode(int enable) {
 
     // Definir o novo modo do console
     SetConsoleMode(hStdin, mode);
-#endif
 }
+#endif
 
 void blocking_mode(){
     blocking_modeOnOff = !blocking_modeOnOff;

@@ -20,6 +20,8 @@
 
 void prepareQuestionByMatter(int selectedMatterId, int *questionsSize, struct Question **matterQuestions)
 {
+
+    printf("");
     FILE *questionFile = fopen("./_Study/questions.txt", "r");
 
     char line[500];
@@ -64,6 +66,7 @@ void prepareQuestionByMatter(int selectedMatterId, int *questionsSize, struct Qu
 
 struct ResultQuestionary showMatterQuestion(int selectedMatterId)
 {
+    printf("");
     int questionsSize = 0;
     struct Question *matterQuestions = NULL; // Inicialmente, NULL
     char userResponse;

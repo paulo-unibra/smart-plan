@@ -48,9 +48,12 @@ int areadyCreated(int arr[], int size, int number)
 
 int main()
 {
+    char* OperationalSystem = verifyOperationalSystem();
+    if(strcmp(OperationalSystem, "Windows") == 0) {
+        characterCorrectorForWindows();
+    }
     setlocale(LC_ALL, "pt_BR.UTF-8");
-    
-    const char* OperationalSystem = verifyOperationalSystem();
+
     struct User loggedUser;
 
     menuLogin(&loggedUser);
