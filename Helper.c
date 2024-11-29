@@ -121,10 +121,9 @@ bool kbhit() {
     return isPressed;
 }
 
-#else
+#elif _WIN32
 
 void set_nonblocking_mode(int enable) {
-#ifdef _WIN32
     // Código para Windows
     HANDLE hStdin = GetStdHandle(STD_INPUT_HANDLE); // Obter o handle do console
     DWORD mode;
@@ -146,27 +145,33 @@ void set_nonblocking_mode(int enable) {
 
     // Definir o novo modo do console
     SetConsoleMode(hStdin, mode);
-#endif
-}
-
-void blocking_mode(){
-    blocking_modeOnOff = !blocking_modeOnOff;
-    HANDLE hStdin = GetStdHandle(STD_INPUT_HANDLE);
-    DWORD mode;
-
-    if(blocking_modeOnOff == true)
-    {
-        mode &= ~(ENABLE_LINE_INPUT | ENABLE_ECHO_INPUT);
-    }
-    else
-    {
-        mode |= (ENABLE_LINE_INPUT | ENABLE_ECHO_INPUT);
-    }
-    SetConsoleMode(hStdin, mode);
 }
 
 #endif
 
+char pressEsc(char* operationalSystem) {
+
+    char ch;
+
+        if(strcmp(operationalSystem, "Windows") == 0) {
+            if(kbhit()) {
+                ch = getChar();
+            }
+        }
+        else {
+            ch = getChar();
+        }
+
+    return ch;
+}
+
+void characterCorrectorForWindows(char* operationalSystem) {
+    if(strcmp(operationalSystem, "Windows") == 0)
+    {
+        system("chcp 65001");
+        cleanConsole();
+    }
+}
 
 int main_helper() {
     set_nonblocking_mode(1);

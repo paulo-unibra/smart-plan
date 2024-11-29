@@ -3,10 +3,10 @@
 #include <unistd.h>
 #include <ctype.h>
 
+#include "../helper.h"
 #include "../_Auth/login.h"
 #include "study.h"
 #include "../validations.h"
-#include "../helper.h"
 #include "../errors.h"
 #include "../_Materies/materies.h"
 
@@ -20,10 +20,10 @@
 
 void prepareQuestionByMatter(int selectedMatterId, int *questionsSize, struct Question **matterQuestions)
 {
+
     FILE *questionFile = fopen("./_Study/questions.txt", "r");
 
     char line[500];
-
 
     if (questionFile == NULL)
     {
@@ -84,6 +84,7 @@ struct ResultQuestionary showMatterQuestion(int selectedMatterId)
 
         if (questionsSize > 0 && matterQuestions != NULL)
         {
+            showHeader("Questionário");
             printf("%s\n\n", matterQuestions[currentQuestion].description);
             printf("%s\n", replaceCommaWithNewline(matterQuestions[currentQuestion].alternatives));
 
@@ -255,29 +256,14 @@ void startStopwatch()
         printf("\n⏱︎  %02d:%02d:%02d\n", horas, minutos, segundos);
         printf("Aperte ESC para parar\n");
 
-        if(strcmp(OPERATIONALSYSTEM, "Windows") == 0)
-        {
-            if(kbhit()) {
-                ch = getChar();
-                if (ch == 27)
-                { // Verifica se "Enter" foi pressionado
-                    printf("==================================\n");
-                    printf("Você estudou %02d:%02d:%02d...\n", horas, minutos, segundos);
-                    printf("==================================\n");
-                    break;
-                }
-            }
-        } 
-        else 
-        {
-            ch = getChar();
-            if (ch == 27)
-            { // Verifica se "Enter" foi pressionado
-                printf("==================================\n");
-                printf("Você estudou %02d:%02d:%02d...\n", horas, minutos, segundos);
-                printf("==================================\n");
-                break;
-            }
+        ch = pressEsc(OPERATIONALSYSTEM);
+        
+        if (ch == 27)
+        { // Verifica se "Enter" foi pressionado
+            printf("==================================\n");
+            printf("Você estudou %02d:%02d:%02d...\n", horas, minutos, segundos);
+            printf("==================================\n");
+            break;
         }
 
         segundos++;
